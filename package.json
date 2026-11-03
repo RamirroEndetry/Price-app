@@ -23,6 +23,8 @@
       "main.js",
       "preload.js",
       "renderer.js",
+      "ares.js",
+      "web-api.js",
       "index.html",
       "style.css",
       "logo.png",

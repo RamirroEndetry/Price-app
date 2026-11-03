@@ -15,6 +15,22 @@ nabídek do souboru.
 - Uložení a otevření nabídky (`*.nabidka.json`), automatické uložení
   rozpracované nabídky v rámci dne
 
+## Webová verze (GitHub Pages)
+
+Stejná aplikace běží i v prohlížeči bez instalace:
+<https://ramirroendetry.github.io/Price-app/>
+
+Nasazuje ji GitHub Actions (`.github/workflows/pages.yml`) při každém pushi
+do `main`; v nastavení repozitáře musí být *Settings → Pages → Source:
+GitHub Actions*. Rozdíly proti Electronu:
+
+- Kopírování pro e-mail používá schránku prohlížeče (`navigator.clipboard`).
+- Uložení a otevření nabídky jde přes dialog prohlížeče (Chrome, Edge),
+  jinde se soubor stáhne / vybere přes běžný výběr souboru.
+- Export do PDF otevře nabídku v nové záložce a spustí tisk, kde zvolíš
+  „Uložit jako PDF“.
+- Klávesové zkratky (Ctrl+N, Ctrl+O, Ctrl+S, Ctrl+P, Ctrl+Enter) fungují i tady.
+
 ## Spuštění ze zdrojáků
 
 Potřebuješ [Node.js](https://nodejs.org/) (LTS).
@@ -38,10 +54,12 @@ Přenosnou verzi bez instalace vytvoří `npm run dist:portable`.
 | Soubor        | Co dělá                                                       |
 | ------------- | ------------------------------------------------------------- |
 | `main.js`     | hlavní proces: okno, menu, dialogy, PDF, schránka, dotaz na ARES |
+| `ares.js`     | dotaz na ARES, sdílený Electronem i webovou verzí             |
+| `web-api.js`  | náhrada propojení s Electronem pro běh v prohlížeči           |
 | `preload.js`  | bezpečný most mezi oknem a hlavním procesem                   |
 | `renderer.js` | logika tabulky, výpočty, HTML pro e-mail, ukládání            |
 | `index.html`  | rozložení aplikace                                            |
 | `style.css`   | vzhled                                                        |
 
-Okno aplikace nemá přístup k síti (CSP `connect-src 'none'`); jediný síťový
-dotaz, vyhledání v ARES, dělá hlavní proces.
+Okno aplikace smí na síť jen na ARES (CSP `connect-src https://ares.gov.cz`).
+V Electronu dělá dotaz hlavní proces, ve webové verzi stránka sama.

@@ -1276,9 +1276,44 @@ async function copyForEmail() {
     ]);
     showToast(done);
   } catch (err) {
+    console.warn('navigator.clipboard selhal, zkouším kopírování přes výběr:', err);
+    if (copyViaSelection(html)) {
+      showToast(done);
+      return;
+    }
     console.error('Kopírování selhalo:', err);
     window.alert('Chyba při kopírování do schránky.');
   }
+}
+
+/**
+ * Poslední záchrana pro webovou verzi: zkopíruje HTML přes výběr a
+ * execCommand('copy'). Nepotřebuje oprávnění ke schránce, stačí, že
+ * akci vyvolal uživatel kliknutím.
+ */
+function copyViaSelection(html) {
+  const host = document.createElement('div');
+  host.contentEditable = 'true';
+  host.setAttribute('aria-hidden', 'true');
+  host.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;';
+  host.innerHTML = html;
+  document.body.appendChild(host);
+
+  const selection = window.getSelection();
+  const range = document.createRange();
+  range.selectNodeContents(host);
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  let ok = false;
+  try {
+    ok = document.execCommand('copy');
+  } catch (err) {
+    ok = false;
+  }
+  selection.removeAllRanges();
+  host.remove();
+  return ok;
 }
 
 function suggestedFileName(model) {

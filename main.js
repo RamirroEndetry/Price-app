@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu, ipcMain, dialog, shell, clipboard, net } = require('electron');
 const path = require('path');
 const fs = require('fs/promises');
+const { createLookup } = require('./ares');
 
 let mainWindow = null;
 
@@ -239,78 +240,16 @@ ipcMain.handle('clipboard:write', (_event, { html, text }) => {
 });
 
 /* ------------------------------------------------------------------ */
-/*  IPC: vyhledání klienta v ARES (registr ekonomických subjektů)     */
-/*  Okno má síť záměrně vypnutou (CSP connect-src 'none'), proto se    */
-/*  rejstříku ptá hlavní proces. net.fetch jde přes Chromium, takže    */
-/*  respektuje systémový proxy. Odpověď se ořeže jen na to, co appka   */
-/*  potřebuje: název, IČO, DIČ a sídlo.                                 */
+/*  IPC: vyhledání klienta v ARES                                      */
+/*  Okno má síť záměrně vypnutou, proto se rejstříku ptá hlavní        */
+/*  proces. Logika dotazu je ve sdíleném ares.js (používá ho i webová  */
+/*  verze); net.fetch jde přes Chromium, takže respektuje systémový    */
+/*  proxy.                                                             */
 /* ------------------------------------------------------------------ */
 
-const ARES_BASE = 'https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty';
-const ARES_TIMEOUT_MS = 10000;
-const ARES_MAX_RESULTS = 10;
+const aresLookup = createLookup((url, init) => net.fetch(url, init));
 
-function aresSubject(subject) {
-  const seat = (subject && subject.sidlo) || {};
-  return {
-    ico: String((subject && subject.ico) || ''),
-    name: String((subject && subject.obchodniJmeno) || '').trim(),
-    dic: String((subject && subject.dic) || ''),
-    address: String(seat.textovaAdresa || ''),
-  };
-}
-
-async function aresFetch(url, init = {}) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), ARES_TIMEOUT_MS);
-  try {
-    return await net.fetch(url, {
-      ...init,
-      signal: controller.signal,
-      headers: { Accept: 'application/json', ...(init.headers || {}) },
-    });
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-ipcMain.handle('ares:lookup', async (_event, query) => {
-  const q = String(query || '').trim();
-  if (!q) return { ok: false, error: 'Zadej IČO nebo název firmy.' };
-
-  const digits = q.replace(/\s+/g, '');
-  const byIco = /^\d{1,8}$/.test(digits);
-
-  try {
-    if (byIco) {
-      // ARES chce vždy 8 číslic — IČO psané bez úvodních nul doplníme.
-      const ico = digits.padStart(8, '0');
-      const res = await aresFetch(`${ARES_BASE}/${ico}`);
-      if (res.status === 404) return { ok: true, byIco, query: ico, results: [], total: 0 };
-      if (!res.ok) return { ok: false, error: `ARES odpověděl chybou ${res.status}.` };
-      const subject = aresSubject(await res.json());
-      return { ok: true, byIco, query: ico, results: subject.name ? [subject] : [], total: subject.name ? 1 : 0 };
-    }
-
-    const res = await aresFetch(`${ARES_BASE}/vyhledat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ obchodniJmeno: q, pocet: ARES_MAX_RESULTS, start: 0 }),
-    });
-    if (!res.ok) return { ok: false, error: `ARES odpověděl chybou ${res.status}.` };
-    const data = await res.json();
-    const results = (data.ekonomickeSubjekty || []).map(aresSubject).filter((s) => s.name);
-    return { ok: true, byIco, query: q, results, total: Number(data.pocetCelkem) || results.length };
-  } catch (err) {
-    const timedOut = err && err.name === 'AbortError';
-    return {
-      ok: false,
-      error: timedOut
-        ? 'ARES neodpověděl včas, zkus to za chvíli znovu.'
-        : 'Nepodařilo se spojit s ARES — zkontroluj připojení k internetu.',
-    };
-  }
-});
+ipcMain.handle('ares:lookup', (_event, query) => aresLookup(query));
 
 /* ------------------------------------------------------------------ */
 /*  Zabezpečení: žádná externí navigace, žádná nová okna               */
