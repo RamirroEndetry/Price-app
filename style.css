@@ -89,7 +89,7 @@ body {
 }
 
 .container {
-    max-width: 1080px;
+    max-width: 1400px;
     width: 100%;
     position: relative;
     z-index: 1;
@@ -815,10 +815,27 @@ tbody tr.drag-over-bottom td {
     opacity: 0.8;
 }
 
+/* Pět sloupců: Klient a Rozlišení grafiky zabírají po dvou, aby se do
+   nich vešel celý název firmy a rozměr; datumová pole stačí po jednom. */
 .meta-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0.9rem 1.25rem;
+}
+
+.meta-field-client,
+.meta-field-graphics {
+    grid-column: span 2;
+}
+
+@media (max-width: 999px) {
+    .meta-grid {
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    }
+
+    .meta-field-graphics {
+        grid-column: auto;
+    }
 }
 
 .meta-grid.collapsed {

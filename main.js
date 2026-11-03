@@ -7,8 +7,8 @@ let mainWindow = null;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1150,
-    height: 860,
+    width: 1480,
+    height: 900,
     minWidth: 960,
     minHeight: 600,
     backgroundColor: '#09090b',
