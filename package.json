@@ -1,0 +1,47 @@
+{
+  "name": "electron-price-table",
+  "version": "2.2.0",
+  "description": "Generátor cenových nabídek pro e-mail (Electron).",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win",
+    "dist:portable": "electron-builder --win portable"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "cz.digiday.pricetable",
+    "productName": "Cenova tabulka",
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "style.css",
+      "logo.png",
+      "icon.png"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Cenová tabulka"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  }
+}

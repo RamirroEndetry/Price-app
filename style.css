@@ -1,0 +1,1295 @@
+:root {
+    --primary: #8b5cf6;
+    --primary-glow: rgba(139, 92, 246, 0.5);
+    --secondary: #ec4899;
+    --accent: #3b82f6;
+    --bg-dark: #09090b;
+    --card-bg: rgba(24, 24, 27, 0.6);
+    --border: rgba(255, 255, 255, 0.08);
+    --text-main: #f8fafc;
+    --text-muted: #a1a1aa;
+    --success: #10b981;
+    --danger: #ef4444;
+    /* Lokální fonty – aplikace nepotřebuje připojení k internetu */
+    --font-inter: 'Inter', 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-inter);
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.6;
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Background Blobs */
+.bg-blobs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    filter: blur(80px);
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: move 20s infinite alternate;
+}
+
+.blob-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--primary);
+    top: -100px;
+    right: -100px;
+}
+
+.blob-2 {
+    width: 350px;
+    height: 350px;
+    background: var(--secondary);
+    bottom: -50px;
+    left: -50px;
+    animation-delay: -5s;
+}
+
+.blob-3 {
+    width: 300px;
+    height: 300px;
+    background: var(--accent);
+    top: 40%;
+    left: 20%;
+    animation-delay: -10s;
+}
+
+@keyframes move {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(50px, 100px) scale(1.1);
+    }
+}
+
+.container {
+    max-width: 1080px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-container {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.9rem 2rem;
+    border-radius: 1.25rem;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+}
+
+.logo-container img {
+    max-height: 52px;
+    width: auto;
+    filter: drop-shadow(0 0 15px rgba(236, 72, 153, 0.3));
+}
+
+header h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 50%, var(--primary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.03em;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+header p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.mode-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    background: rgba(15, 23, 42, 0.4);
+    padding: 0.4rem;
+    border-radius: 3rem;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+}
+
+.mode-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.6rem 2rem;
+    border-radius: 2.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mode-btn:hover {
+    color: var(--text-main);
+}
+
+.mode-btn.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.card:hover {
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+    margin-bottom: 2rem;
+}
+
+th {
+    text-align: left;
+    padding: 0.9rem 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+}
+
+td {
+    padding: 1rem 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s ease;
+}
+
+tbody tr {
+    animation: fadeInRow 0.4s ease-out forwards;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+@keyframes fadeInRow {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+td.section-header {
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--text-main);
+    font-weight: 700;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 0.5rem;
+}
+
+tr.section-header-row td {
+    background: transparent;
+    border: none;
+    padding-top: 2rem;
+    padding-bottom: 0.5rem;
+}
+
+tr.section-subtotal-row td {
+    background: rgba(255, 255, 255, 0.03);
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+tr.section-subtotal-row .subtotal-label {
+    text-align: right;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+tr.section-subtotal-row .subtotal-value {
+    text-align: right;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+td:last-child {
+    border-right: 1px solid var(--border);
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+}
+
+.price-input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid transparent;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-main);
+    padding: 0.75rem 1rem;
+    width: 100%;
+    outline: none;
+    font-weight: 600;
+    font-family: var(--font-inter);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.price-input:focus {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: var(--primary);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 0 2px var(--primary-glow);
+    transform: translateY(-1px);
+}
+
+.price-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.old-price-container {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+    white-space: nowrap;
+}
+
+.old-price-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed var(--border);
+    color: var(--text-muted);
+    font-style: italic;
+    width: 4.5rem;
+    padding: 0;
+    line-height: normal;
+    text-align: right;
+    outline: none;
+    font-family: var(--font-inter);
+    vertical-align: baseline;
+    height: 1.2rem;
+}
+
+.old-price-input:focus {
+    border-bottom-color: var(--primary);
+    color: var(--text-main);
+}
+
+.item-input {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    width: 100%;
+    padding: 0.5rem 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    outline: none;
+    font-family: var(--font-inter);
+    border-radius: 0.5rem;
+    transition: background 0.2s ease, padding 0.2s ease;
+}
+
+.item-input:focus {
+    background: rgba(255, 255, 255, 0.05);
+    padding-left: 1rem;
+}
+
+.qty-col {
+    width: 5.5rem;
+    text-align: center;
+}
+
+.row-total-col {
+    text-align: right;
+    width: 9rem;
+}
+
+.row-total-cell {
+    text-align: right;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.qty-input,
+.days-input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid transparent;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-main);
+    padding: 0.75rem 0.25rem;
+    width: 100%;
+    text-align: center;
+    outline: none;
+    font-weight: 600;
+    font-family: var(--font-inter);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.qty-input:focus,
+.days-input:focus {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: var(--primary);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 0 2px var(--primary-glow);
+    transform: translateY(-1px);
+}
+
+.summary-row td {
+    background: transparent;
+    border: none;
+    padding-top: 1rem;
+}
+
+.summary-row .label {
+    font-weight: 600;
+    text-align: right;
+    color: var(--text-muted);
+}
+
+.summary-row .value {
+    font-weight: 700;
+    font-size: 1.25rem;
+    text-align: right;
+}
+
+.summary-row.vats .value {
+    font-size: 2rem;
+    color: var(--primary);
+    text-shadow: 0 0 20px var(--primary-glow);
+}
+
+/* Hide number input spinners */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.btn {
+    cursor: pointer;
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    padding: 1.2rem 2.5rem;
+    box-shadow: 0 10px 20px -5px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 20px 30px -5px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    filter: brightness(1.15);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    padding: 0.6rem 1.25rem;
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.5rem;
+}
+
+.btn-danger:hover {
+    background: var(--danger);
+    color: white;
+    transform: scale(1.1);
+}
+
+.btn-lg {
+    font-size: 1.15rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.row-actions {
+    margin-top: 0.5rem;
+}
+
+.app-actions {
+    margin-top: 2rem;
+}
+
+.discount-pct-col {
+    width: 4.5rem;
+    text-align: center;
+}
+
+.discount-pct-cell {
+    text-align: center;
+}
+
+.discount-pct-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+}
+
+.discount-input-row {
+    width: 3.4rem;
+    text-align: right;
+    background: rgba(22, 163, 74, 0.08);
+    border: 1px solid rgba(22, 163, 74, 0.2);
+    border-radius: 0.4rem;
+    color: var(--text-main);
+    font-family: var(--font-inter);
+    font-size: 0.85rem;
+    padding: 0.3rem 0.4rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.discount-input-row:focus {
+    background: rgba(22, 163, 74, 0.18);
+    border-color: rgba(22, 163, 74, 0.5);
+    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.15);
+}
+
+/* Přepínač % / částka — klikací symbol vedle pole */
+.discount-mode-toggle,
+.unit-toggle-inline {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 0.35rem;
+    color: var(--text-muted);
+    font-family: var(--font-inter);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0.28rem 0.4rem;
+    min-width: 1.6rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.discount-mode-toggle:hover,
+.unit-toggle-inline:hover {
+    background: rgba(139, 92, 246, 0.25);
+    border-color: rgba(139, 92, 246, 0.45);
+    color: var(--text-main);
+}
+
+.discount-mode-toggle.is-amount,
+.unit-toggle-inline.is-amount {
+    background: rgba(139, 92, 246, 0.14);
+    border-color: rgba(139, 92, 246, 0.3);
+    color: var(--text-main);
+}
+
+.unit-toggle-inline {
+    margin-left: 0.4rem;
+    padding: 0.28rem 0.55rem;
+}
+
+.toast {
+    position: fixed;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(16, 185, 129, 0.9);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 3rem;
+    font-weight: 700;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 100;
+}
+
+.toast.hidden {
+    opacity: 0;
+    transform: translate(-50%, 2rem) scale(0.9);
+    pointer-events: none;
+}
+
+.actions-col,
+.drag-col {
+    width: 3rem;
+    text-align: center;
+}
+
+.drag-handle {
+    cursor: grab;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.drag-handle:hover {
+    color: var(--primary);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+tbody tr.dragging {
+    opacity: 0.4;
+    scale: 0.98;
+    background: rgba(var(--primary), 0.1);
+    border: 1px dashed var(--primary);
+}
+
+tbody tr.drag-over td {
+    border-top: 2px solid var(--primary) !important;
+}
+
+/* Specific drop target styling */
+tbody tr.drag-over-bottom td {
+    border-bottom: 2px solid var(--primary) !important;
+}
+
+/* VAT Toggle Switch & Currency Switcher */
+.top-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    margin-top: -1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.vat-toggle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.currency-switcher {
+    display: flex;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.2rem;
+    border-radius: 2rem;
+    gap: 0.1rem;
+}
+
+.currency-btn {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.35rem 0.9rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.currency-btn.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.currency-btn:hover:not(.active) {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.vat-switch {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.vat-switch input {
+    display: none;
+}
+
+.vat-slider {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vat-slider::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--text-muted);
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vat-switch input:checked+.vat-slider {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.vat-switch input:checked+.vat-slider::before {
+    transform: translateX(20px);
+    background-color: white;
+}
+
+.vat-label {
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+}
+
+.vat-toggle-container:hover .vat-label {
+    color: var(--text-main);
+}
+
+/* Disable interactions while dragging for better reliability */
+.dragging-active input,
+.dragging-active button {
+    pointer-events: none;
+}
+
+/* ================================================================== */
+/*  Přístupnost                                                        */
+/* ================================================================== */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ================================================================== */
+/*  Údaje nabídky                                                      */
+/* ================================================================== */
+
+.offer-meta {
+    background: rgba(24, 24, 27, 0.5);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.meta-toggle {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-inter);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0 0 0.75rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.meta-toggle:hover {
+    color: var(--text-main);
+}
+
+.meta-toggle-icon {
+    font-size: 0.55rem;
+    opacity: 0.8;
+}
+
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 0.9rem 1.25rem;
+}
+
+.meta-grid.collapsed {
+    display: none;
+}
+
+.meta-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.meta-field-wide {
+    grid-column: 1 / -1;
+}
+
+.meta-field span {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.meta-field input {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid transparent;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-main);
+    font-family: var(--font-inter);
+    font-size: 0.95rem;
+    padding: 0.6rem 0.8rem;
+    outline: none;
+    transition: all 0.25s ease;
+    width: 100%;
+}
+
+.meta-field input:focus {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-glow);
+}
+
+.meta-field input::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+    cursor: pointer;
+}
+
+/* Klient: pole + tlačítko ARES + našeptávač nalezených firem */
+/* Popisek stejně jako u ostatních polí (flex), jinak by řádková výška
+   běžného textu posunula celé pole o pár pixelů níž. */
+.meta-field-client label {
+    display: flex;
+    flex-direction: column;
+}
+
+.client-lookup {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: 0.4rem;
+}
+
+.client-lookup input {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.lookup-btn {
+    flex: none;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-muted);
+    font-family: var(--font-inter);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0 0.7rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lookup-btn:hover:not(:disabled) {
+    background: rgba(139, 92, 246, 0.25);
+    border-color: rgba(139, 92, 246, 0.45);
+    color: var(--text-main);
+}
+
+.lookup-btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+}
+
+.ares-results {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    z-index: 60;
+    min-width: min(28rem, 80vw);
+    background: rgba(24, 24, 27, 0.97);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 0.6rem;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    max-height: 16rem;
+    overflow-y: auto;
+    padding: 0.3rem;
+}
+
+.ares-results.hidden {
+    display: none;
+}
+
+.ares-result {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-radius: 0.45rem;
+    color: var(--text-main);
+    font-family: var(--font-inter);
+    font-size: 0.9rem;
+    padding: 0.5rem 0.65rem;
+    cursor: pointer;
+}
+
+.ares-result:hover,
+.ares-result:focus {
+    background: rgba(139, 92, 246, 0.2);
+    outline: none;
+}
+
+.ares-result small,
+.ares-more {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.35;
+}
+
+.ares-more {
+    padding: 0.45rem 0.65rem 0.3rem;
+}
+
+.client-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.client-hint:empty {
+    display: none;
+}
+
+.meta-field textarea {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid transparent;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-main);
+    font-family: var(--font-inter);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    padding: 0.6rem 0.8rem;
+    outline: none;
+    transition: all 0.25s ease;
+    width: 100%;
+    min-height: 4.6rem;
+    resize: vertical;
+}
+
+.meta-field textarea:focus {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-glow);
+}
+
+.meta-field input::placeholder,
+.meta-field textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.45;
+}
+
+/* Oddělovač skupin polí uvnitř panelu */
+.meta-divider {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--primary);
+    opacity: 0.9;
+}
+
+.meta-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* ================================================================== */
+/*  Ovládání DPH / měny                                                */
+/* ================================================================== */
+
+.mini-select {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 2rem;
+    color: var(--text-main);
+    font-family: var(--font-inter);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.35rem 0.7rem;
+    outline: none;
+    cursor: pointer;
+}
+
+.mini-select option {
+    background: #18181b;
+    color: var(--text-main);
+}
+
+.currency-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.rate-field {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.rate-field input {
+    width: 4.5rem;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-main);
+    font-family: var(--font-inter);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: right;
+    padding: 0.3rem 0.5rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.rate-field input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-glow);
+}
+
+.rate-suffix {
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+/* ================================================================== */
+/*  Přepínač DNY / MĚSÍCE v hlavičce tabulky                           */
+/* ================================================================== */
+
+.header-unit-toggle {
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: 0.5rem;
+    color: var(--text-muted);
+    font-family: var(--font-inter);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.5rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    width: 100%;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.header-unit-toggle:hover {
+    background: rgba(139, 92, 246, 0.25);
+    color: var(--text-main);
+}
+
+.toggle-icon {
+    font-size: 0.55rem;
+    opacity: 0.7;
+}
+
+/* ================================================================== */
+/*  Původní cena                                                       */
+/* ================================================================== */
+
+.old-price-toggle {
+    align-self: flex-start;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-inter);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.1rem 0;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: all 0.2s ease;
+}
+
+.old-price-toggle:hover {
+    opacity: 1;
+    color: var(--primary);
+}
+
+.old-price-remove {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1;
+    padding: 0 0.2rem;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+}
+
+.old-price-remove:hover {
+    color: var(--danger);
+    opacity: 1;
+}
+
+.old-price-container[hidden] {
+    display: none;
+}
+
+/* ================================================================== */
+/*  Souhrnné řádky                                                     */
+/* ================================================================== */
+
+.discount-row {
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.discount-row .label {
+    color: var(--text-muted);
+}
+
+.summary-input {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid transparent;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-main);
+    font-family: var(--font-inter);
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: right;
+    padding: 0.5rem 0.75rem;
+    width: 100%;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.summary-input:focus {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-glow);
+}
+
+/* ================================================================== */
+/*  Zamčené řádky (barter – doplňkové služby)                          */
+/* ================================================================== */
+
+.locked-row .item-input {
+    cursor: default;
+    color: var(--text-muted);
+}
+
+/* ================================================================== */
+/*  Akční tlačítka                                                     */
+/* ================================================================== */
+
+.row-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+kbd {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border);
+    border-radius: 0.3rem;
+    padding: 0.1rem 0.35rem;
+    font-family: var(--font-inter);
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.secondary-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.secondary-actions .btn {
+    padding: 0.65rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ================================================================== */
+/*  Doba trvání                                                        */
+/* ================================================================== */
+
+.days-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.4;
+}
+
+/* ================================================================== */
+/*  Šířky sloupců – název položky má dostat co nejvíc místa           */
+/* ================================================================== */
+
+.item-col {
+    width: auto;
+    min-width: 12rem;
+}
+
+.price-col {
+    width: 11rem;
+}
+
+.item-input {
+    min-width: 0;
+    text-overflow: ellipsis;
+}
+
+/* Na užších oknech necháme tabulku vodorovně rolovat místo drcení */
+.card {
+    overflow-x: auto;
+}
+
+#priceTable {
+    min-width: 800px;
+}

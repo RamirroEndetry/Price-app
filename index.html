@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generátor cenových nabídek</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="DigiDay Logo" id="logoImg">
+            </div>
+            <h1>Generátor Cenové Tabulky</h1>
+            <p>Vytvořte tabulku a zkopírujte ji přímo do e-mailu.</p>
+        </header>
+
+        <nav class="mode-switcher" aria-label="Režim nabídky">
+            <button type="button" id="rentalModeBtn" class="mode-btn active">Pronájem</button>
+            <button type="button" id="saleModeBtn" class="mode-btn">Prodej</button>
+            <button type="button" id="barterModeBtn" class="mode-btn">Barter</button>
+        </nav>
+
+        <section class="offer-meta card-soft" aria-label="Údaje nabídky">
+            <button type="button" id="metaToggle" class="meta-toggle" aria-expanded="true">
+                <span class="meta-toggle-icon">▼</span> Údaje nabídky
+            </button>
+            <div class="meta-grid" id="metaGrid">
+                <div class="meta-field meta-field-client">
+                    <label for="metaClient"><span>Klient</span></label>
+                    <div class="client-lookup">
+                        <input type="text" id="metaClient" placeholder="Název firmy nebo IČO" autocomplete="off">
+                        <button type="button" id="aresBtn" class="lookup-btn"
+                            title="Vyhledat firmu v rejstříku ARES podle IČO nebo názvu (Enter)">🔍 ARES</button>
+                        <div id="aresResults" class="ares-results hidden" role="listbox" aria-label="Nalezené firmy">
+                        </div>
+                    </div>
+                    <small id="clientHint" class="client-hint"></small>
+                </div>
+                <label class="meta-field">
+                    <span>Číslo nabídky</span>
+                    <input type="text" id="metaNumber" placeholder="2026-001">
+                </label>
+                <label class="meta-field">
+                    <span>Datum</span>
+                    <input type="date" id="metaDate">
+                </label>
+                <label class="meta-field">
+                    <span>Platnost do</span>
+                    <input type="date" id="metaValidUntil">
+                </label>
+
+                <div class="meta-divider" role="presentation"><span>Místo a termín akce</span></div>
+                <label class="meta-field meta-field-wide">
+                    <span>Adresa</span>
+                    <input type="text" id="metaAddress" placeholder="Ulice a číslo, město">
+                </label>
+                <label class="meta-field">
+                    <span>Instalace</span>
+                    <input type="date" id="metaInstallDate">
+                </label>
+                <label class="meta-field">
+                    <span>Deinstalace</span>
+                    <input type="date" id="metaRemovalDate">
+                </label>
+                <label class="meta-field">
+                    <span>Počet dní</span>
+                    <input type="number" id="metaEventDays" min="0" step="1" placeholder="dopočítá se z termínu">
+                </label>
+                <label class="meta-field">
+                    <span>Rozlišení grafiky</span>
+                    <input type="text" id="metaGraphics" placeholder="např. 320 x 960 px">
+                </label>
+
+                <div class="meta-divider" role="presentation"><span>Text pod tabulkou</span></div>
+                <label class="meta-field meta-field-wide">
+                    <span>Poznámka</span>
+                    <input type="text" id="metaNote" placeholder="Např. Ceny jsou uvedeny bez DPH…">
+                </label>
+                <label class="meta-field meta-field-wide">
+                    <span>Závěrečný text e-mailu</span>
+                    <textarea id="metaClosing" rows="3"
+                        placeholder="Prázdné pole = žádný závěrečný text"></textarea>
+                </label>
+            </div>
+        </section>
+
+        <div class="top-controls">
+            <div class="vat-toggle-container">
+                <label class="vat-switch">
+                    <input type="checkbox" id="vatToggle" checked>
+                    <div class="vat-slider"></div>
+                </label>
+                <span class="vat-label">Zobrazit celkem s DPH</span>
+                <select id="vatRateSelect" class="mini-select" aria-label="Sazba DPH">
+                    <option value="21" selected>21 %</option>
+                    <option value="12">12 %</option>
+                    <option value="0">0 % (přenesená DP)</option>
+                </select>
+            </div>
+
+            <div class="currency-group">
+                <div class="currency-switcher">
+                    <button type="button" id="czkCurrencyBtn" class="currency-btn active">CZK (Kč)</button>
+                    <button type="button" id="eurCurrencyBtn" class="currency-btn">EUR (€)</button>
+                </div>
+                <label class="rate-field" title="Kurz použitý při přepnutí měny">
+                    <span>Kurz</span>
+                    <input type="number" id="eurRateInput" min="0.01" step="0.01" value="25"
+                        aria-label="Kurz CZK za 1 EUR">
+                    <span class="rate-suffix">Kč / €</span>
+                </label>
+            </div>
+        </div>
+
+        <main>
+            <div class="card shadow-lg">
+                <table id="priceTable">
+                    <thead>
+                        <tr>
+                            <th class="drag-col"><span class="sr-only">Pořadí</span></th>
+                            <th class="item-col">Položka</th>
+                            <th class="qty-col">Ks</th>
+                            <th class="qty-col days-col-header">
+                                <button type="button" id="globalUnitToggle" class="header-unit-toggle"
+                                    title="Klikněte pro přepnutí Dny / Měsíce">
+                                    <span id="globalUnitLabel">DNY</span>
+                                    <small class="toggle-icon">▼</small>
+                                </button>
+                            </th>
+                            <th class="price-col">Cena / ks bez DPH</th>
+                            <th class="discount-pct-col">Sleva</th>
+                            <th class="row-total-col">Celkem bez DPH</th>
+                            <th class="actions-col"><span class="sr-only">Akce</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Dynamické řádky -->
+                    </tbody>
+                    <tfoot>
+                        <tr class="summary-row discount-row">
+                            <td colspan="6" class="label discount-label">
+                                Sleva
+                                <button type="button" id="discountModeToggle" class="unit-toggle-inline"
+                                    title="Přepnout mezi částkou a procenty">Kč</button>
+                            </td>
+                            <td class="value">
+                                <input type="number" id="discountInput" class="summary-input" min="0" step="0.01"
+                                    placeholder="0" draggable="false" aria-label="Celková sleva">
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="summary-row" id="subtotalRow">
+                            <td colspan="6" class="label">Celkem bez DPH</td>
+                            <td id="subtotal" class="value">0 Kč</td>
+                            <td></td>
+                        </tr>
+                        <tr class="summary-row vats" id="vatRow">
+                            <td colspan="6" class="label" id="vatRowLabel">Celkem s DPH (21 %)</td>
+                            <td id="totalWithVat" class="value highlight">0 Kč</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="row-actions">
+                    <button type="button" id="addRowBtn" class="btn btn-secondary">
+                        <span class="icon">+</span> Přidat položku
+                    </button>
+                    <span class="hint">Tip: <kbd>Enter</kbd> v posledním řádku přidá další položku</span>
+                </div>
+            </div>
+
+            <div class="app-actions">
+                <button type="button" id="copyBtn" class="btn btn-primary btn-lg">
+                    <span class="icon">📋</span> Zkopírovat pro e-mail
+                </button>
+                <div class="secondary-actions">
+                    <button type="button" id="pdfBtn" class="btn btn-secondary">📄 Export do PDF</button>
+                    <button type="button" id="saveBtn" class="btn btn-secondary">💾 Uložit nabídku</button>
+                    <button type="button" id="loadBtn" class="btn btn-secondary">📂 Otevřít nabídku</button>
+                    <button type="button" id="newBtn" class="btn btn-secondary">✨ Nová nabídka</button>
+                </div>
+            </div>
+        </main>
+
+        <section id="toast" class="toast hidden" role="status" aria-live="polite">
+            Tabulka byla zkopírována do schránky!
+        </section>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+
+</html>
