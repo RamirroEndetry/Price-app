@@ -28,7 +28,9 @@ jobs:
       - name: Připravit statické soubory
         run: |
           mkdir -p site
-          cp index.html style.css renderer.js ares.js web-api.js logo.png icon.png site/
+          cp index.html style.css renderer.js ares.js web-api.js sky.js calendar.js mascot.js logo.png icon.png site/
+          cp -r fonts site/
+          cp -r assets site/
           touch site/.nojekyll
 
       - uses: actions/configure-pages@v5

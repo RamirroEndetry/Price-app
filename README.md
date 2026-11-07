@@ -14,6 +14,22 @@ nabídek do souboru.
 - Kopírování pro e-mail (HTML + prostý text), export do PDF
 - Uložení a otevření nabídky (`*.nabidka.json`), automatické uložení
   rozpracované nabídky v rámci dne
+- **Kalendář u dat** – datum jde psát ručně, nebo vybrat v kalendáři (ikonka
+  v poli). Deinstalace se otevře v měsíci instalace, instalaci zvýrazní,
+  dřívější dny nepustí a dobu akce podbarví; platnost se drží data vystavení.
+  Výběr spustí stejné dopočty jako ruční zápis (počet dní, platnost +14 dní).
+- **Lišta s akcemi** dole je pořád po ruce i s výslednou částkou (s DPH
+  nebo bez, podle přepínače)
+- **Vesmírný vzhled** sladěný s Generátorem objednávek: procedurální
+  mlhovina, hvězdy a meteory (`sky.js`), skleněné panely, písma
+  Bricolage Grotesque a JetBrains Mono přibalená ve složce `fonts/` (OFL)
+- **Maskot** v horní liště – vlastní postavička v levandulové mikině s oušky na
+  kapuci. Chvíli stojí a dýchá, pak se stydlivě usměje, zamává a vrátí se do
+  klidu; najetí myší animaci spustí hned. Animace je 5s průhledné video
+  `assets/mascot-dance.webm` (vygenerované v Higgsfield z její předlohy na
+  zeleném pozadí se stejným prvním i posledním snímkem, zelená vyříznutá
+  ffmpegem do VP9 s alfa kanálem), klid je jeho první snímek `mascot-idle.png`.
+  Řídí ho `mascot.js`, CSP proto povoluje `media-src 'self'`.
 
 ## Webová verze (GitHub Pages)
 
@@ -60,6 +76,15 @@ Přenosnou verzi bez instalace vytvoří `npm run dist:portable`.
 | `renderer.js` | logika tabulky, výpočty, HTML pro e-mail, ukládání            |
 | `index.html`  | rozložení aplikace                                            |
 | `style.css`   | vzhled                                                        |
+| `sky.js`      | vesmírné pozadí (canvas), stejný generátor jako v Generátoru objednávek |
+| `calendar.js` | kalendář k polím s datem                                      |
+| `fonts/`      | přibalená písma (offline, CSP `font-src 'self'`)                  |
 
 Okno aplikace smí na síť jen na ARES (CSP `connect-src https://ares.gov.cz`).
+Hlavní proces přijímá IPC jen z hlavního rámu stránky aplikace, okno nesmí
+navigovat jinam (ani po přetažení souboru) a „Ukázat ve složce“ funguje jen
+pro soubory, které aplikace sama uložila.
+
+Nové soubory je potřeba přidat do `build.files` v `package.json` (instalátor)
+i do kroku „Připravit statické soubory“ v `.github/workflows/pages.yml` (web).
 V Electronu dělá dotaz hlavní proces, ve webové verzi stránka sama.

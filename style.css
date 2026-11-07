@@ -1,519 +1,1235 @@
-:root {
-    --primary: #8b5cf6;
-    --primary-glow: rgba(139, 92, 246, 0.5);
-    --secondary: #ec4899;
-    --accent: #3b82f6;
-    --bg-dark: #09090b;
-    --card-bg: rgba(24, 24, 27, 0.6);
-    --border: rgba(255, 255, 255, 0.08);
-    --text-main: #f8fafc;
-    --text-muted: #a1a1aa;
-    --success: #10b981;
-    --danger: #ef4444;
-    /* Lokální fonty – aplikace nepotřebuje připojení k internetu */
-    --font-inter: 'Inter', 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, sans-serif;
+/* ==================================================================
+   Cenová tabulka – motiv „Vesmír DigiDay“
+   Stejný vizuální jazyk jako Generátor objednávek: noční obloha
+   s procedurální mlhovinou a meteory (sky.js), skleněné panely,
+   pilulková tlačítka se září, magenta + fialová značky DigiDay.
+
+   1. Písma a tokeny      6. Tabulka
+   2. Základ a obloha     7. Souhrn
+   3. Horní lišta         8. Lišta s akcemi
+   4. Ovládací prvky      9. Kalendář, ARES, toast
+   5. Údaje nabídky      10. Pohyb, přístupnost, užší okna
+   ================================================================== */
+
+/* ==================================================================
+   1. Písma (přibalená – offline, CSP font-src 'self') a tokeny
+   ================================================================== */
+
+@font-face {
+    font-family: 'Bricolage Grotesque Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 200 800;
+    src: url(fonts/bricolage-grotesque-latin-ext-opsz-normal.woff2) format('woff2-variations');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-* {
+@font-face {
+    font-family: 'Bricolage Grotesque Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 200 800;
+    src: url(fonts/bricolage-grotesque-latin-opsz-normal.woff2) format('woff2-variations');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url(fonts/jetbrains-mono-latin-ext-400-normal.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url(fonts/jetbrains-mono-latin-400-normal.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 500;
+    src: url(fonts/jetbrains-mono-latin-ext-500-normal.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 500;
+    src: url(fonts/jetbrains-mono-latin-500-normal.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 700;
+    src: url(fonts/jetbrains-mono-latin-ext-700-normal.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 700;
+    src: url(fonts/jetbrains-mono-latin-700-normal.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+    color-scheme: dark;
+
+    --bg-base: #05060f;
+    --bg-gradient:
+        radial-gradient(1200px 800px at 10% -8%, rgba(124, 58, 237, 0.14) 0%, transparent 62%),
+        radial-gradient(1000px 700px at 94% 2%, rgba(230, 0, 126, 0.1) 0%, transparent 58%),
+        linear-gradient(170deg, #070918 0%, #03040b 55%, #070a19 100%);
+
+    --surface: rgba(20, 22, 50, 0.58);
+    --surface-strong: rgba(24, 26, 58, 0.86);
+    --surface-sunk: rgba(8, 10, 28, 0.55);
+    --border: rgba(160, 170, 255, 0.14);
+    --border-strong: rgba(170, 160, 255, 0.28);
+    --sheen: rgba(190, 195, 255, 0.16);
+
+    --text: #eeecff;
+    --text-2: #a6a9d2;
+    --text-3: #6f74a3;
+
+    --accent: #ff2e93;
+    --accent-2: #8b7bff;
+    --accent-text: #ff6fb2;
+    --accent-grad: linear-gradient(120deg, #ff2e93 0%, #c03dff 52%, #6d5cff 100%);
+    --accent-soft: rgba(255, 46, 147, 0.12);
+    --glow-magenta: rgba(255, 46, 147, 0.5);
+    --glow-violet: rgba(139, 123, 255, 0.5);
+    --beacon: #56d4ee;
+    --success: #3ddc97;
+    --danger: #ff6b81;
+
+    --shadow-card: 0 1px 0 var(--sheen) inset, 0 24px 50px -30px rgba(0, 0, 0, 0.9);
+    --shadow-float: 0 40px 80px -30px rgba(0, 0, 0, 0.95);
+    --glass: blur(18px) saturate(160%);
+
+    --font-sans: 'Bricolage Grotesque Variable', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+    --radius-pill: 999px;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ==================================================================
+   2. Základ a obloha
+   ================================================================== */
+
+*,
+*::before,
+*::after {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+}
+
+/* Obloha patří na <html> – pozadí <body> by se kreslilo až za canvasy. */
+html {
+    background-color: var(--bg-base);
+    background-image: var(--bg-gradient);
+    background-attachment: fixed;
 }
 
 body {
-    font-family: var(--font-inter);
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    line-height: 1.6;
-    padding: 2rem;
+    margin: 0;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    overflow-x: hidden;
-    position: relative;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* Background Blobs */
-.bg-blobs {
+h1,
+p {
+    margin: 0;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+::selection {
+    background: var(--accent);
+    color: #ffffff;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.ico {
+    flex-shrink: 0;
+}
+
+/* Canvasy oblohy vkládá sky.js */
+.sky {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     z-index: -1;
     overflow: hidden;
-    filter: blur(80px);
+    pointer-events: none;
 }
 
-.blob {
+.sky canvas {
     position: absolute;
-    border-radius: 50%;
-    opacity: 0.4;
-    animation: move 20s infinite alternate;
+    display: block;
 }
 
-.blob-1 {
-    width: 400px;
-    height: 400px;
-    background: var(--primary);
-    top: -100px;
-    right: -100px;
+.sky-layer {
+    inset: 0;
+    width: 100%;
+    height: 100%;
 }
 
-.blob-2 {
-    width: 350px;
-    height: 350px;
-    background: var(--secondary);
-    bottom: -50px;
-    left: -50px;
-    animation-delay: -5s;
+.sky-nebula {
+    left: -5%;
+    top: -5%;
+    width: 110%;
+    height: 110%;
+    will-change: transform;
 }
 
-.blob-3 {
-    width: 300px;
-    height: 300px;
-    background: var(--accent);
-    top: 40%;
-    left: 20%;
-    animation-delay: -10s;
+.sky-nebula-far {
+    opacity: 0.95;
+    animation: nebula-drift-far 240s ease-in-out infinite alternate;
 }
 
-@keyframes move {
-    0% {
-        transform: translate(0, 0) scale(1);
-    }
+.sky-nebula-near {
+    opacity: 0.55;
+    mix-blend-mode: screen;
+    animation: nebula-drift-near 170s ease-in-out infinite alternate;
+}
 
-    100% {
-        transform: translate(50px, 100px) scale(1.1);
-    }
+@keyframes nebula-drift-far {
+    from { transform: translate3d(-1.2%, -0.8%, 0); }
+    to { transform: translate3d(1.2%, 0.9%, 0); }
+}
+
+@keyframes nebula-drift-near {
+    from { transform: translate3d(1.8%, 1%, 0); }
+    to { transform: translate3d(-1.8%, -1.2%, 0); }
 }
 
 .container {
-    max-width: 1400px;
-    width: 100%;
-    position: relative;
-    z-index: 1;
+    max-width: 1520px;
+    margin: 0 auto;
+    /* Dole místo pro plovoucí lištu s akcemi */
+    padding: 0 2rem 7.5rem;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 1.75rem;
+/* ==================================================================
+   3. Horní lišta
+   ================================================================== */
+
+.topbar {
+    position: sticky;
+    top: 0.9rem;
+    z-index: 50;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 1rem;
-}
-
-.logo-container {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 0.9rem 2rem;
-    border-radius: 1.25rem;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin: 0.9rem 0 1.25rem;
+    padding: 0.65rem 0.7rem 0.65rem 0.9rem;
     border: 1px solid var(--border);
-    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    backdrop-filter: var(--glass);
+    -webkit-backdrop-filter: var(--glass);
+    box-shadow: var(--shadow-card);
 }
 
-.logo-container img {
-    max-height: 52px;
-    width: auto;
-    filter: drop-shadow(0 0 15px rgba(236, 72, 153, 0.3));
+.topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
 }
 
-header h1 {
-    font-size: 2.4rem;
-    font-weight: 800;
-    margin-bottom: 0.75rem;
-    background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 50%, var(--primary) 100%);
+.topbar-titles {
+    display: grid;
+    min-width: 0;
+}
+
+/* ------------------------------------------------------------------
+   Maskot – vlastní postavička v mikině s oušky na kapuci
+   Klid: mascot-idle.png jemně dýchá. Animace: mascot-dance.webm
+   (průhledné video) – přehrání řídí mascot.js, tady jen prolínání.
+   Postavička je vyšší než lišta a lehce z ní vykukuje nahoru i dolů;
+   výška je spočítaná tak, aby se ouška vešla i při posílání srdíčka.
+   ------------------------------------------------------------------ */
+
+.mascot {
+    position: relative;
+    flex-shrink: 0;
+    width: 3.2rem;
+    height: 3.2rem;
+    cursor: pointer;
+}
+
+/* Výřez videa těsně kolem postavičky (poměr 456 : 792) */
+.mascot-figure {
+    position: absolute;
+    left: 50%;
+    bottom: -1.3rem;
+    width: 3.2rem;
+    height: 5.55rem;
+    margin-left: -1.6rem;
+}
+
+.mascot-idle,
+.mascot-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: 50% 100%;
+    filter: drop-shadow(0 0 6px rgba(255, 46, 147, 0.35)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    user-select: none;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+
+/* V klidu dýchá a nepatrně se pohupuje */
+.mascot-idle {
+    transform-origin: 50% 98%;
+    animation: mascot-idle 3.4s ease-in-out infinite;
+}
+
+.mascot-video {
+    opacity: 0;
+}
+
+.mascot.is-dancing .mascot-video {
+    opacity: 1;
+}
+
+.mascot.is-dancing .mascot-idle {
+    opacity: 0;
+}
+
+@keyframes mascot-idle {
+    0%, 100% { transform: rotate(0) scale(1, 1); }
+    25% { transform: rotate(-1.2deg) scale(1.006, 1.012); }
+    50% { transform: rotate(0) scale(1.01, 1.018); }
+    75% { transform: rotate(1.2deg) scale(1.006, 1.012); }
+}
+
+.topbar-overline {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    white-space: nowrap;
+}
+
+.topbar h1 {
+    font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.6rem);
+    font-weight: 700;
+    font-variation-settings: 'opsz' 96;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+.title-glow {
+    background: var(--accent-grad);
     -webkit-background-clip: text;
     background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.03em;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    color: transparent;
 }
 
-header p {
-    color: var(--text-muted);
-    font-size: 1rem;
-    font-weight: 400;
-}
-
+/* Režim nabídky – pilulky v liště */
 .mode-switcher {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
-    background: rgba(15, 23, 42, 0.4);
-    padding: 0.4rem;
-    border-radius: 3rem;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
+    display: inline-flex;
+    gap: 3px;
+    padding: 4px;
     border: 1px solid var(--border);
-    backdrop-filter: blur(10px);
+    border-radius: var(--radius-pill);
+    background: var(--surface-sunk);
 }
 
 .mode-btn {
-    background: transparent;
+    padding: 0.55rem 1.25rem;
     border: none;
-    color: var(--text-muted);
-    padding: 0.6rem 2rem;
-    border-radius: 2.5rem;
-    cursor: pointer;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    font-size: 0.9rem;
     font-weight: 600;
-    font-size: 0.95rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-2);
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.25s;
 }
 
-.mode-btn:hover {
-    color: var(--text-main);
+@media (hover: hover) {
+    .mode-btn:hover:not(.active) {
+        background: var(--accent-soft);
+        color: var(--text);
+    }
 }
 
 .mode-btn.active {
-    background: var(--primary);
-    color: white;
-    box-shadow: 0 4px 15px var(--primary-glow);
+    background: var(--accent-grad);
+    color: #ffffff;
+    box-shadow: 0 8px 20px -10px var(--glow-magenta);
 }
+
+/* ==================================================================
+   4. Ovládací prvky
+   ================================================================== */
+
+.btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding: 0 1.15rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.88rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition:
+        transform 0.25s var(--ease-spring),
+        box-shadow 0.25s var(--ease-out),
+        border-color 0.2s,
+        background-color 0.2s,
+        color 0.2s;
+}
+
+.btn-secondary {
+    border: 1px solid var(--border-strong);
+    background: var(--surface-strong);
+    color: var(--text);
+}
+
+.btn-primary {
+    overflow: hidden;
+    border: none;
+    background: var(--accent-grad);
+    color: #ffffff;
+    box-shadow: 0 10px 28px -12px var(--glow-magenta), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Odlesk, který přejede přes hlavní tlačítko při najetí */
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.38) 48%, transparent 66%);
+    transform: translateX(-120%);
+    transition: transform 0.7s var(--ease-out);
+    pointer-events: none;
+}
+
+.btn-lg {
+    height: 3.1rem;
+    padding: 0 1.5rem;
+    font-size: 0.98rem;
+}
+
+.btn-primary kbd {
+    padding: 0.12rem 0.5rem;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.2);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.btn-danger {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: transparent;
+    font-size: 1.15rem;
+    line-height: 1;
+    color: var(--text-3);
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+@media (hover: hover) {
+    .btn-secondary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        border-color: var(--accent-2);
+        box-shadow: 0 10px 24px -14px var(--glow-violet);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 34px -12px var(--glow-magenta), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled)::after {
+        transform: translateX(120%);
+    }
+
+    .btn-danger:hover {
+        border-color: var(--danger);
+        background: rgba(255, 80, 110, 0.1);
+        color: var(--danger);
+    }
+}
+
+.btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.97);
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Pole – zaoblená, lehce zapuštěná do skla, při psaní září */
+.meta-field input,
+.meta-field textarea,
+.client-lookup input,
+.rate-field input,
+.mini-select,
+.item-input,
+.qty-input,
+.days-input,
+.price-input,
+.old-price-input,
+.discount-input-row,
+.summary-input {
+    width: 100%;
+    padding: 0.62rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-sunk);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.25s, background-color 0.2s;
+}
+
+.meta-field input::placeholder,
+.meta-field textarea::placeholder,
+.client-lookup input::placeholder,
+.item-input::placeholder,
+.days-input::placeholder,
+.price-input::placeholder,
+.discount-input-row::placeholder,
+.summary-input::placeholder {
+    color: var(--text-3);
+}
+
+@media (hover: hover) {
+    .meta-field input:hover,
+    .meta-field textarea:hover,
+    .client-lookup input:hover,
+    .item-input:hover,
+    .qty-input:hover,
+    .days-input:hover,
+    .price-input:hover,
+    .discount-input-row:hover,
+    .summary-input:hover {
+        border-color: var(--border-strong);
+    }
+}
+
+.meta-field input:focus,
+.meta-field textarea:focus,
+.client-lookup input:focus,
+.rate-field input:focus,
+.mini-select:focus,
+.item-input:focus,
+.qty-input:focus,
+.days-input:focus,
+.price-input:focus,
+.old-price-input:focus,
+.discount-input-row:focus,
+.summary-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft), 0 0 22px -8px var(--glow-magenta);
+}
+
+/* Ručně zapsané datum mimo povolený rozsah (např. deinstalace před instalací) */
+.meta-field input:invalid {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 4px rgba(255, 80, 110, 0.12);
+}
+
+input[type='number'] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type='date'] {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+}
+
+/* Vestavěný kalendář prohlížeče nahrazuje vlastní – viz calendar.js */
+input[type='date']::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+.mini-select {
+    width: auto;
+    padding: 0.5rem 2.2rem 0.5rem 0.9rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    appearance: none;
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a6a9d2' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    cursor: pointer;
+}
+
+.mini-select option {
+    background: #15173a;
+    color: var(--text);
+}
+
+kbd {
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    background: var(--surface-sunk);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+}
+
+/* ==================================================================
+   5. Údaje nabídky
+   ================================================================== */
+
+.offer-meta {
+    position: relative;
+    z-index: 5;
+    margin-bottom: 1.1rem;
+    padding: 0.4rem 1.4rem 1.4rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    backdrop-filter: var(--glass);
+    -webkit-backdrop-filter: var(--glass);
+    box-shadow: var(--shadow-card);
+}
+
+.meta-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
+    padding: 0.75rem 0;
+    border: none;
+    background: transparent;
+    text-align: left;
+}
+
+/* Číslo sekce jako planetka – stejně jako v Generátoru objednávek */
+.meta-toggle-index {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border: 1px solid var(--accent-2);
+    border-radius: 50%;
+    background: var(--surface-strong);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    box-shadow: 0 0 16px -4px var(--glow-violet);
+}
+
+.offer-meta:focus-within .meta-toggle-index {
+    border-color: transparent;
+    background: var(--accent-grad);
+    box-shadow: 0 0 22px -2px var(--glow-magenta);
+}
+
+.meta-toggle-title {
+    font-size: 1.22rem;
+    font-weight: 650;
+    letter-spacing: -0.025em;
+}
+
+.meta-toggle-icon {
+    display: grid;
+    margin-left: auto;
+    color: var(--text-3);
+    transition: transform 0.4s var(--ease-spring), color 0.2s;
+}
+
+.meta-toggle[aria-expanded='false'] .meta-toggle-icon {
+    transform: rotate(-90deg);
+}
+
+@media (hover: hover) {
+    .meta-toggle:hover .meta-toggle-icon {
+        color: var(--accent-text);
+    }
+}
+
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem 1.1rem;
+    padding: 0.4rem 0 0 2.95rem;
+    animation: unfold 0.4s var(--ease-out);
+}
+
+.meta-grid.collapsed {
+    display: none;
+}
+
+.meta-field-client,
+.meta-field-graphics {
+    grid-column: span 2;
+}
+
+.meta-field-wide {
+    grid-column: 1 / -1;
+}
+
+.meta-field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+}
+
+.meta-field > span,
+.meta-field label > span,
+.meta-field-client label span {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-2);
+    transition: color 0.2s;
+}
+
+.meta-field:focus-within > span,
+.meta-field-client:focus-within label span {
+    color: var(--accent-text);
+}
+
+/* Popisek „Klient“ je v <label> uvnitř divu – srovnat ho s ostatními */
+.meta-field-client > label {
+    display: flex;
+    font-size: 0.68rem;
+    line-height: 1.5;
+}
+
+.meta-field textarea {
+    resize: vertical;
+    min-height: 4.5rem;
+    line-height: 1.55;
+}
+
+/* Podsekce jako „oběžná dráha“ s popiskem */
+.meta-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    grid-column: 1 / -1;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    color: var(--text);
+}
+
+.meta-divider::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--beacon);
+    box-shadow: 0 0 10px var(--beacon);
+}
+
+.meta-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border-strong), transparent);
+}
+
+/* Klient + ARES */
+.client-lookup {
+    position: relative;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.client-lookup input {
+    flex: 1;
+}
+
+.lookup-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0 1rem;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: var(--accent-grad);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px -10px var(--glow-magenta);
+    transition: transform 0.25s var(--ease-spring), box-shadow 0.25s;
+}
+
+@media (hover: hover) {
+    .lookup-btn:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 26px -10px var(--glow-magenta);
+    }
+}
+
+.lookup-btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+}
+
+.client-hint {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--success);
+}
+
+.client-hint:empty {
+    display: none;
+}
+
+/* Lišta pod údaji: DPH, měna, kurz */
+.top-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem 1.5rem;
+    margin-bottom: 1.1rem;
+    padding: 0.6rem 0.8rem 0.6rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    backdrop-filter: var(--glass);
+    -webkit-backdrop-filter: var(--glass);
+    box-shadow: var(--shadow-card);
+}
+
+.vat-toggle-container,
+.currency-group {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.vat-switch {
+    position: relative;
+    display: inline-block;
+    width: 2.75rem;
+    height: 1.55rem;
+    cursor: pointer;
+}
+
+.vat-switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.vat-slider {
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    background: var(--surface-sunk);
+    transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+
+.vat-slider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: -0.55rem;
+    border-radius: 50%;
+    background: var(--text-2);
+    transition: transform 0.35s var(--ease-spring), background 0.2s;
+}
+
+.vat-switch input:checked + .vat-slider {
+    border-color: transparent;
+    background: var(--accent-grad);
+    box-shadow: 0 0 16px -4px var(--glow-magenta);
+}
+
+.vat-switch input:checked + .vat-slider::before {
+    transform: translateX(1.2rem);
+    background: #ffffff;
+}
+
+.vat-switch input:focus-visible + .vat-slider {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.vat-label {
+    font-weight: 600;
+    color: var(--text-2);
+    transition: color 0.2s;
+}
+
+.vat-toggle-container:hover .vat-label {
+    color: var(--text);
+}
+
+.currency-switcher {
+    display: inline-flex;
+    gap: 3px;
+    padding: 3px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--surface-sunk);
+}
+
+.currency-btn {
+    padding: 0.42rem 0.9rem;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-2);
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.25s;
+}
+
+@media (hover: hover) {
+    .currency-btn:hover:not(.active) {
+        background: var(--accent-soft);
+        color: var(--text);
+    }
+}
+
+.currency-btn.active {
+    background: var(--accent-grad);
+    color: #ffffff;
+    box-shadow: 0 6px 16px -8px var(--glow-magenta);
+}
+
+.rate-field {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+}
+
+.rate-field input {
+    width: 4.6rem;
+    padding: 0.42rem 0.7rem;
+    border-radius: var(--radius-pill);
+    text-align: right;
+}
+
+.rate-suffix {
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+/* ==================================================================
+   6. Tabulka položek
+   ================================================================== */
 
 .card {
-    background: var(--card-bg);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    position: relative;
+    padding: 0.6rem 1.2rem 1.1rem;
     border: 1px solid var(--border);
-    border-radius: 1.5rem;
-    padding: 2.5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-    animation: fadeIn 0.6s ease-out;
-}
-
-.card:hover {
-    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    backdrop-filter: var(--glass);
+    -webkit-backdrop-filter: var(--glass);
+    box-shadow: var(--shadow-card);
 }
 
 table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 0.5rem;
-    margin-bottom: 2rem;
+    border-spacing: 0 6px;
 }
 
 th {
-    text-align: left;
-    padding: 0.9rem 0.75rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    font-size: 0.75rem;
+    padding: 0.75rem 0.55rem 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
     letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    text-align: left;
+    white-space: nowrap;
 }
 
+/* Řádky jako kompaktní skleněné pásy */
 td {
-    padding: 1rem 0.75rem;
-    background: rgba(255, 255, 255, 0.02);
+    padding: 0.4rem 0.55rem;
+    background: var(--surface-sunk);
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    transition: background 0.2s ease;
+    vertical-align: middle;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
-tbody tr {
-    animation: fadeInRow 0.4s ease-out forwards;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+tbody tr td:first-child {
+    border-left: 1px solid var(--border);
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
 }
 
-tbody tr:hover td {
-    background: rgba(255, 255, 255, 0.06);
-}
-
-@keyframes fadeInRow {
-    from {
-        opacity: 0;
-        transform: translateX(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-td.section-header {
-    background: rgba(139, 92, 246, 0.15);
-    color: var(--text-main);
-    font-weight: 700;
-    padding: 0.75rem 1.25rem;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 0.5rem;
-}
-
-tr.section-header-row td {
-    background: transparent;
-    border: none;
-    padding-top: 2rem;
-    padding-bottom: 0.5rem;
-}
-
-tr.section-subtotal-row td {
-    background: rgba(255, 255, 255, 0.03);
-    border: none;
-    padding: 0.75rem 1rem;
-}
-
-tr.section-subtotal-row .subtotal-label {
-    text-align: right;
-    font-weight: 600;
-    color: var(--text-muted);
-}
-
-tr.section-subtotal-row .subtotal-value {
-    text-align: right;
-    font-weight: 700;
-    color: var(--text-main);
-}
-
-td:last-child {
+tbody tr td:last-child {
     border-right: 1px solid var(--border);
-    border-top-right-radius: 0.75rem;
-    border-bottom-right-radius: 0.75rem;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
-.price-input {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid transparent;
-    border-bottom: 1px solid var(--border);
-    border-radius: 0.5rem;
-    color: var(--text-main);
-    padding: 0.75rem 1rem;
-    width: 100%;
-    outline: none;
+@media (hover: hover) {
+    tbody tr.item-row:hover td {
+        background: rgba(30, 32, 70, 0.6);
+        border-color: var(--border-strong);
+    }
+}
+
+/* Řádek, ve kterém se právě píše, se rozsvítí */
+tbody tr.item-row:focus-within td {
+    border-color: rgba(255, 46, 147, 0.35);
+    background: rgba(40, 20, 60, 0.55);
+}
+
+.drag-col,
+.actions-col {
+    width: 2.8rem;
+    text-align: center;
+}
+
+.item-col {
+    width: auto;
+    min-width: 12rem;
+}
+
+.qty-col {
+    width: 5rem;
+    text-align: center;
+}
+
+.price-col {
+    width: 11rem;
+}
+
+.discount-pct-col {
+    width: 7rem;
+    text-align: center;
+}
+
+.row-total-col {
+    width: 9rem;
+    text-align: right;
+}
+
+/* Položka – nenápadné pole, které vypadá jako text, dokud do něj nekliknete */
+.item-input {
+    min-width: 0;
+    border-color: transparent;
+    background: transparent;
+    font-size: 0.98rem;
     font-weight: 600;
-    font-family: var(--font-inter);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-overflow: ellipsis;
 }
 
-.price-input:focus {
-    background: rgba(0, 0, 0, 0.4);
-    border-color: var(--primary);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 0 2px var(--primary-glow);
-    transform: translateY(-1px);
+.locked-row .item-input {
+    cursor: default;
+    color: var(--text-2);
+}
+
+.qty-input,
+.days-input {
+    text-align: center;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+}
+
+.days-input::placeholder {
+    color: var(--text-3);
+}
+
+.header-unit-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--accent-2);
+    border-radius: var(--radius-pill);
+    background: rgba(139, 123, 255, 0.12);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    transition: background-color 0.2s, box-shadow 0.25s;
+}
+
+@media (hover: hover) {
+    .header-unit-toggle:hover {
+        background: rgba(139, 123, 255, 0.25);
+        box-shadow: 0 0 14px -4px var(--glow-violet);
+    }
+}
+
+.toggle-icon {
+    font-size: 0.6rem;
+    opacity: 0.7;
 }
 
 .price-cell {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
+}
+
+.price-input {
+    text-align: right;
+}
+
+/*
+  „+ původní cena“ sedí uvnitř pole vlevo (cena je zarovnaná doprava) –
+  pod polem by každý řádek zbytečně zvětšoval o celou řádku.
+*/
+.old-price-toggle {
+    position: absolute;
+    top: 1.32rem;
+    left: 0.45rem;
+    translate: 0 -50%;
+    padding: 0.1rem 0.4rem;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: var(--surface-strong);
+    font-size: 0.7rem;
+    color: var(--text-3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, color 0.2s;
+}
+
+/* „+ původní cena“ jen u řádku pod myší nebo v práci – jinak by rušila */
+tr.item-row:hover .old-price-toggle,
+tr.item-row:focus-within .old-price-toggle {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Když je původní cena zadaná, tlačítko už není potřeba */
+.price-cell:has(.old-price-container:not([hidden])) .old-price-toggle {
+    display: none;
+}
+
+@media (hover: hover) {
+    .old-price-toggle:hover {
+        color: var(--accent-text);
+    }
 }
 
 .old-price-container {
     display: flex;
     align-items: center;
-    gap: 0.3rem;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-style: italic;
+    gap: 0.35rem;
+    font-size: 0.74rem;
+    color: var(--text-3);
     white-space: nowrap;
 }
 
+.old-price-container[hidden] {
+    display: none;
+}
+
 .old-price-input {
-    background: transparent;
-    border: none;
-    border-bottom: 1px dashed var(--border);
-    color: var(--text-muted);
-    font-style: italic;
-    width: 4.5rem;
-    padding: 0;
-    line-height: normal;
-    text-align: right;
-    outline: none;
-    font-family: var(--font-inter);
-    vertical-align: baseline;
-    height: 1.2rem;
-}
-
-.old-price-input:focus {
-    border-bottom-color: var(--primary);
-    color: var(--text-main);
-}
-
-.item-input {
-    background: transparent;
-    border: none;
-    color: var(--text-main);
-    width: 100%;
-    padding: 0.5rem 0.5rem;
-    font-size: 1.1rem;
-    font-weight: 500;
-    outline: none;
-    font-family: var(--font-inter);
-    border-radius: 0.5rem;
-    transition: background 0.2s ease, padding 0.2s ease;
-}
-
-.item-input:focus {
-    background: rgba(255, 255, 255, 0.05);
-    padding-left: 1rem;
-}
-
-.qty-col {
     width: 5.5rem;
-    text-align: center;
-}
-
-.row-total-col {
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
     text-align: right;
-    width: 9rem;
+    text-decoration: line-through;
+    color: var(--text-2);
 }
 
-.row-total-cell {
-    text-align: right;
-    font-weight: 600;
-    color: var(--text-main);
-}
-
-.qty-input,
-.days-input {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid transparent;
-    border-bottom: 1px solid var(--border);
-    border-radius: 0.5rem;
-    color: var(--text-main);
-    padding: 0.75rem 0.25rem;
-    width: 100%;
-    text-align: center;
-    outline: none;
-    font-weight: 600;
-    font-family: var(--font-inter);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.qty-input:focus,
-.days-input:focus {
-    background: rgba(0, 0, 0, 0.4);
-    border-color: var(--primary);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 0 2px var(--primary-glow);
-    transform: translateY(-1px);
-}
-
-.summary-row td {
+.old-price-remove {
+    padding: 0 0.25rem;
+    border: none;
     background: transparent;
-    border: none;
-    padding-top: 1rem;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--text-3);
 }
 
-.summary-row .label {
-    font-weight: 600;
-    text-align: right;
-    color: var(--text-muted);
-}
-
-.summary-row .value {
-    font-weight: 700;
-    font-size: 1.25rem;
-    text-align: right;
-}
-
-.summary-row.vats .value {
-    font-size: 2rem;
-    color: var(--primary);
-    text-shadow: 0 0 20px var(--primary-glow);
-}
-
-/* Hide number input spinners */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type=number] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-
-.btn {
-    cursor: pointer;
-    border: none;
-    border-radius: 0.75rem;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: white;
-    padding: 1.2rem 2.5rem;
-    box-shadow: 0 10px 20px -5px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    font-size: 1.1rem;
-    letter-spacing: 0.02em;
-}
-
-.btn-primary:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 20px 30px -5px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    filter: brightness(1.15);
-}
-
-.btn-secondary {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-main);
-    padding: 0.6rem 1.25rem;
-    border: 1px solid var(--border);
-}
-
-.btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-.btn-danger {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--danger);
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 0.5rem;
-}
-
-.btn-danger:hover {
-    background: var(--danger);
-    color: white;
-    transform: scale(1.1);
-}
-
-.btn-lg {
-    font-size: 1.15rem;
-    width: 100%;
-    margin-top: 1rem;
-}
-
-.row-actions {
-    margin-top: 0.5rem;
-}
-
-.app-actions {
-    margin-top: 2rem;
-}
-
-.discount-pct-col {
-    width: 4.5rem;
-    text-align: center;
+@media (hover: hover) {
+    .old-price-remove:hover {
+        color: var(--danger);
+    }
 }
 
 .discount-pct-cell {
@@ -521,112 +1237,73 @@ input[type=number] {
 }
 
 .discount-pct-container {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.2rem;
+    gap: 0.3rem;
 }
 
 .discount-input-row {
-    width: 3.4rem;
+    width: 4rem;
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
     text-align: right;
-    background: rgba(22, 163, 74, 0.08);
-    border: 1px solid rgba(22, 163, 74, 0.2);
-    border-radius: 0.4rem;
-    color: var(--text-main);
-    font-family: var(--font-inter);
-    font-size: 0.85rem;
-    padding: 0.3rem 0.4rem;
-    outline: none;
-    transition: all 0.2s;
 }
 
-.discount-input-row:focus {
-    background: rgba(22, 163, 74, 0.18);
-    border-color: rgba(22, 163, 74, 0.5);
-    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.15);
-}
-
-/* Přepínač % / částka — klikací symbol vedle pole */
 .discount-mode-toggle,
 .unit-toggle-inline {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border);
-    border-radius: 0.35rem;
-    color: var(--text-muted);
-    font-family: var(--font-inter);
-    font-size: 0.75rem;
+    min-width: 2rem;
+    padding: 0.28rem 0.5rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    background: var(--surface-strong);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
     font-weight: 700;
-    line-height: 1;
-    padding: 0.28rem 0.4rem;
-    min-width: 1.6rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    color: var(--text-2);
+    transition: border-color 0.2s, color 0.2s, background-color 0.2s;
 }
 
-.discount-mode-toggle:hover,
-.unit-toggle-inline:hover {
-    background: rgba(139, 92, 246, 0.25);
-    border-color: rgba(139, 92, 246, 0.45);
-    color: var(--text-main);
+.unit-toggle-inline.is-amount,
+.discount-mode-toggle.is-amount {
+    border-color: var(--accent-2);
+    color: var(--text);
 }
 
-.discount-mode-toggle.is-amount,
-.unit-toggle-inline.is-amount {
-    background: rgba(139, 92, 246, 0.14);
-    border-color: rgba(139, 92, 246, 0.3);
-    color: var(--text-main);
+@media (hover: hover) {
+    .discount-mode-toggle:hover,
+    .unit-toggle-inline:hover {
+        border-color: var(--accent);
+        color: var(--accent-text);
+    }
 }
 
-.unit-toggle-inline {
-    margin-left: 0.4rem;
-    padding: 0.28rem 0.55rem;
-}
-
-.toast {
-    position: fixed;
-    bottom: 3rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(16, 185, 129, 0.9);
-    backdrop-filter: blur(10px);
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 3rem;
+.row-total-cell {
+    font-family: var(--font-mono);
     font-weight: 700;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 100;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
 }
 
-.toast.hidden {
-    opacity: 0;
-    transform: translate(-50%, 2rem) scale(0.9);
-    pointer-events: none;
-}
-
-.actions-col,
-.drag-col {
-    width: 3rem;
-    text-align: center;
-}
-
+/* Přetahování řádků */
 .drag-handle {
+    display: grid;
+    place-items: center;
+    width: 1.8rem;
+    height: 2.2rem;
+    margin: 0 auto;
+    border-radius: var(--radius-sm);
+    color: var(--text-3);
     cursor: grab;
-    color: var(--text-muted);
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.5;
-    transition: all 0.2s ease;
     user-select: none;
+    transition: color 0.2s, background-color 0.2s;
 }
 
-.drag-handle:hover {
-    color: var(--primary);
-    opacity: 1;
-    transform: scale(1.1);
+@media (hover: hover) {
+    .drag-handle:hover {
+        background: var(--accent-soft);
+        color: var(--text);
+    }
 }
 
 .drag-handle:active {
@@ -634,135 +1311,504 @@ input[type=number] {
 }
 
 tbody tr.dragging {
-    opacity: 0.4;
-    scale: 0.98;
-    background: rgba(var(--primary), 0.1);
-    border: 1px dashed var(--primary);
+    opacity: 0.45;
 }
 
 tbody tr.drag-over td {
-    border-top: 2px solid var(--primary) !important;
+    border-top: 2px solid var(--accent) !important;
 }
 
-/* Specific drop target styling */
 tbody tr.drag-over-bottom td {
-    border-bottom: 2px solid var(--primary) !important;
+    border-bottom: 2px solid var(--accent) !important;
 }
 
-/* VAT Toggle Switch & Currency Switcher */
-.top-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 3rem;
-    margin-top: -1rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-}
-
-.vat-toggle-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.currency-switcher {
-    display: flex;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 0.2rem;
-    border-radius: 2rem;
-    gap: 0.1rem;
-}
-
-.currency-btn {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.35rem 0.9rem;
-    border-radius: 2rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.currency-btn.active {
-    background: var(--primary);
-    color: white;
-    box-shadow: 0 4px 12px var(--primary-glow);
-}
-
-.currency-btn:hover:not(.active) {
-    color: var(--text-main);
-    background: rgba(255, 255, 255, 0.06);
-}
-
-.vat-switch {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.vat-switch input {
-    display: none;
-}
-
-.vat-slider {
-    position: relative;
-    width: 44px;
-    height: 24px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
-    border: 1px solid var(--border);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.vat-slider::before {
-    content: "";
-    position: absolute;
-    height: 18px;
-    width: 18px;
-    left: 2px;
-    bottom: 2px;
-    background-color: var(--text-muted);
-    border-radius: 50%;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.vat-switch input:checked+.vat-slider {
-    background-color: var(--primary);
-    border-color: var(--primary);
-    box-shadow: 0 0 10px var(--primary-glow);
-}
-
-.vat-switch input:checked+.vat-slider::before {
-    transform: translateX(20px);
-    background-color: white;
-}
-
-.vat-label {
-    color: var(--text-muted);
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: color 0.3s;
-}
-
-.vat-toggle-container:hover .vat-label {
-    color: var(--text-main);
-}
-
-/* Disable interactions while dragging for better reliability */
 .dragging-active input,
 .dragging-active button {
     pointer-events: none;
 }
 
-/* ================================================================== */
-/*  Přístupnost                                                        */
-/* ================================================================== */
+/* Sekce (barter) */
+tr.section-header-row td,
+td.section-header {
+    padding: 0.55rem 1rem;
+    border: none;
+    border-radius: var(--radius-md);
+    background: linear-gradient(90deg, rgba(139, 123, 255, 0.22), rgba(255, 46, 147, 0.1) 60%, transparent);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+}
+
+tr.section-subtotal-row td {
+    padding: 0.4rem 0.55rem;
+    border: none;
+    background: transparent;
+}
+
+tr.section-subtotal-row .subtotal-label {
+    text-align: right;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text-2);
+}
+
+tr.section-subtotal-row .subtotal-value {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* ==================================================================
+   7. Souhrn pod tabulkou
+   ================================================================== */
+
+.summary-row td {
+    padding: 0.35rem 0.55rem;
+    border: none;
+    background: transparent;
+}
+
+.summary-row .label {
+    text-align: right;
+    font-weight: 600;
+    color: var(--text-2);
+}
+
+.discount-row .label {
+    display: table-cell;
+}
+
+.discount-label {
+    white-space: nowrap;
+}
+
+.discount-label .unit-toggle-inline {
+    margin-left: 0.5rem;
+}
+
+.summary-row .value {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.summary-input {
+    width: 8rem;
+    margin-left: auto;
+    display: block;
+    text-align: right;
+}
+
+/* Výsledná částka svítí */
+.summary-row .value.highlight,
+.summary-row.vats .value {
+    font-family: var(--font-sans);
+    font-size: 1.55rem;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    text-shadow: 0 0 24px var(--glow-magenta);
+}
+
+.row-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.6rem;
+}
+
+.hint {
+    font-size: 0.8rem;
+    color: var(--text-3);
+}
+
+/* ==================================================================
+   8. Lišta s akcemi – plovoucí kapsle dole, vždy po ruce
+   ================================================================== */
+
+.app-actions {
+    position: fixed;
+    left: 50%;
+    bottom: 1rem;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: min(1460px, calc(100% - 2rem));
+    padding: 0.55rem 0.6rem 0.55rem 1.3rem;
+    transform: translateX(-50%);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    background: rgba(14, 15, 38, 0.82);
+    backdrop-filter: var(--glass);
+    -webkit-backdrop-filter: var(--glass);
+    box-shadow: var(--shadow-float), 0 0 50px -24px var(--glow-violet);
+}
+
+.dock-total {
+    display: grid;
+    margin-right: auto;
+    line-height: 1.15;
+}
+
+.dock-total span {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+}
+
+.dock-total strong {
+    font-size: 1.45rem;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 22px var(--glow-magenta);
+}
+
+.secondary-actions {
+    display: flex;
+    gap: 0.45rem;
+}
+
+/* ==================================================================
+   9. Kalendář, ARES, toast
+   ================================================================== */
+
+.date-field {
+    position: relative;
+}
+
+.date-field input {
+    padding-right: 2.9rem;
+}
+
+.date-trigger {
+    position: absolute;
+    top: 50%;
+    right: 0.35rem;
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    translate: 0 -50%;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-2);
+    transition: color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.25s;
+}
+
+@media (hover: hover) {
+    .date-trigger:hover {
+        border-color: var(--border-strong);
+        background: var(--accent-soft);
+        color: var(--accent-text);
+    }
+}
+
+.date-trigger.is-open {
+    border-color: transparent;
+    background: var(--accent-grad);
+    color: #ffffff;
+    box-shadow: 0 0 18px -4px var(--glow-magenta);
+}
+
+.calendar {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    z-index: 70;
+    width: 19rem;
+    padding: 0.85rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    /* Barva skla přes plnou barvu oblohy – vypadá stejně, ale nic neprosvítá */
+    background: linear-gradient(var(--surface-strong), var(--surface-strong)), var(--bg-base);
+    box-shadow: var(--shadow-float), 0 0 50px -20px var(--glow-violet);
+    text-transform: none;
+    letter-spacing: normal;
+    animation: pop-in 0.32s var(--ease-spring);
+    transform-origin: top left;
+}
+
+/* Pole v pravé části mřížky – kalendář se otevírá doleva */
+#metaValidUntil + .date-trigger + .calendar,
+.date-field:has(#metaValidUntil) .calendar {
+    left: auto;
+    right: 0;
+    transform-origin: top right;
+}
+
+.calendar-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+}
+
+.calendar-title {
+    font-size: 1.02rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    text-transform: capitalize;
+    color: var(--text);
+}
+
+.calendar-title span {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-3);
+}
+
+.calendar-nav {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface-sunk);
+    color: var(--text-2);
+    transition: border-color 0.2s, color 0.2s;
+}
+
+@media (hover: hover) {
+    .calendar-nav:hover {
+        border-color: var(--accent-2);
+        color: var(--text);
+    }
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.calendar-weekday {
+    padding: 0.2rem 0 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--text-3);
+}
+
+.calendar-day {
+    position: relative;
+    aspect-ratio: 1;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text);
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+@media (hover: hover) {
+    .calendar-day:hover:not(:disabled):not(.is-selected) {
+        border-color: var(--accent-2);
+        background: var(--accent-soft);
+    }
+}
+
+.calendar-day.is-today {
+    border-color: var(--border-strong);
+}
+
+/* Doba akce mezi instalací a deinstalací */
+.calendar-day.is-between {
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+}
+
+.calendar-day.is-reference {
+    border-color: var(--beacon);
+    color: var(--beacon);
+    font-weight: 700;
+}
+
+.calendar-day.is-reference::after,
+.calendar-legend i {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    margin-left: -2px;
+    border-radius: 50%;
+    background: var(--beacon);
+    box-shadow: 0 0 6px var(--beacon);
+}
+
+.calendar-day.is-selected {
+    border-color: transparent;
+    background: var(--accent-grad);
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 0 16px -4px var(--glow-magenta);
+}
+
+.calendar-day:disabled {
+    color: var(--text-3);
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.calendar-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
+}
+
+.calendar-legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-sans);
+    font-size: 0.74rem;
+    color: var(--text-2);
+}
+
+.calendar-legend i {
+    position: static;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.calendar-actions {
+    display: flex;
+    gap: 0.25rem;
+    margin-left: auto;
+}
+
+.calendar-link {
+    padding: 0.3rem 0.65rem;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent-text);
+}
+
+@media (hover: hover) {
+    .calendar-link:hover {
+        background: var(--accent-soft);
+    }
+}
+
+/* Výsledky hledání v ARES */
+.ares-results {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    right: 0;
+    z-index: 70;
+    min-width: min(28rem, 80vw);
+    max-height: 22rem;
+    overflow-y: auto;
+    padding: 0.35rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    background: linear-gradient(var(--surface-strong), var(--surface-strong)), var(--bg-base);
+    box-shadow: var(--shadow-float), 0 0 50px -20px var(--glow-violet);
+    animation: pop-in 0.28s var(--ease-spring);
+}
+
+.ares-results.hidden {
+    display: none;
+}
+
+.ares-result {
+    display: grid;
+    gap: 0.15rem;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    text-align: left;
+    transition: background-color 0.15s;
+}
+
+.ares-result:hover,
+.ares-result:focus {
+    outline: none;
+    background: var(--accent-soft);
+}
+
+.ares-result strong {
+    font-weight: 650;
+}
+
+.ares-result small {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-2);
+}
+
+.ares-more {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.78rem;
+    color: var(--text-3);
+}
+
+/* Toast – nad lištou s akcemi */
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 6.2rem;
+    z-index: 80;
+    max-width: min(32rem, calc(100vw - 2rem));
+    padding: 0.75rem 1.2rem 0.75rem 1rem;
+    transform: translateX(-50%);
+    border: 1px solid var(--border-strong);
+    border-left: 3px solid var(--success);
+    border-radius: var(--radius-md);
+    background: linear-gradient(var(--surface-strong), var(--surface-strong)), var(--bg-base);
+    box-shadow: var(--shadow-float), 0 0 30px -14px var(--success);
+    font-weight: 600;
+    transition: opacity 0.3s, transform 0.4s var(--ease-spring);
+}
+
+.toast.hidden {
+    opacity: 0;
+    transform: translate(-50%, 1.2rem) scale(0.96);
+    pointer-events: none;
+}
+
+/* ==================================================================
+   10. Pohyb, přístupnost, užší okna
+   ================================================================== */
+
+@keyframes pop-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.96);
+    }
+}
+
+@keyframes unfold {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+}
 
 .sr-only {
     position: absolute;
@@ -776,537 +1822,84 @@ tbody tr.drag-over-bottom td {
     border: 0;
 }
 
-/* ================================================================== */
-/*  Údaje nabídky                                                      */
-/* ================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
 
-.offer-meta {
-    background: rgba(24, 24, 27, 0.5);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
-    border-radius: 1rem;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1.5rem;
+    .sky-nebula,
+    .mascot * {
+        animation: none !important;
+    }
 }
 
-.meta-toggle {
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
     background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-family: var(--font-inter);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    padding: 0 0 0.75rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: color 0.2s ease;
 }
 
-.meta-toggle:hover {
-    color: var(--text-main);
+::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 10px;
+    background: var(--border-strong) padding-box;
 }
 
-.meta-toggle-icon {
-    font-size: 0.55rem;
-    opacity: 0.8;
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-2) padding-box;
 }
 
-/* Pět sloupců: Klient a Rozlišení grafiky zabírají po dvou, aby se do
-   nich vešel celý název firmy a rozměr; datumová pole stačí po jednom. */
-.meta-grid {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 0.9rem 1.25rem;
-}
-
-.meta-field-client,
-.meta-field-graphics {
-    grid-column: span 2;
-}
-
-@media (max-width: 999px) {
+@media (max-width: 1180px) {
     .meta-grid {
         grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        padding-left: 0;
     }
 
+    .meta-field-client,
     .meta-field-graphics {
-        grid-column: auto;
+        grid-column: 1 / -1;
+    }
+
+    .secondary-actions .btn span {
+        display: none;
+    }
+
+    .secondary-actions .btn {
+        width: 2.75rem;
+        padding: 0;
     }
 }
 
-.meta-grid.collapsed {
-    display: none;
-}
-
-.meta-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-}
-
-.meta-field-wide {
-    grid-column: 1 / -1;
-}
-
-.meta-field span {
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-}
-
-.meta-field input {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid transparent;
-    border-bottom: 1px solid var(--border);
-    border-radius: 0.5rem;
-    color: var(--text-main);
-    font-family: var(--font-inter);
-    font-size: 0.95rem;
-    padding: 0.6rem 0.8rem;
-    outline: none;
-    transition: all 0.25s ease;
-    width: 100%;
-}
-
-.meta-field input:focus {
-    background: rgba(0, 0, 0, 0.4);
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-glow);
-}
-
-.meta-field input::-webkit-calendar-picker-indicator {
-    filter: invert(0.7);
-    cursor: pointer;
-}
-
-/* Klient: pole + tlačítko ARES + našeptávač nalezených firem */
-/* Popisek stejně jako u ostatních polí (flex), jinak by řádková výška
-   běžného textu posunula celé pole o pár pixelů níž. */
-.meta-field-client label {
-    display: flex;
-    flex-direction: column;
-}
-
-.client-lookup {
-    position: relative;
-    display: flex;
-    align-items: stretch;
-    gap: 0.4rem;
-}
-
-.client-lookup input {
-    flex: 1 1 auto;
-    min-width: 0;
-}
-
-.lookup-btn {
-    flex: none;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border);
-    border-radius: 0.5rem;
-    color: var(--text-muted);
-    font-family: var(--font-inter);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    padding: 0 0.7rem;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.lookup-btn:hover:not(:disabled) {
-    background: rgba(139, 92, 246, 0.25);
-    border-color: rgba(139, 92, 246, 0.45);
-    color: var(--text-main);
-}
-
-.lookup-btn:disabled {
-    opacity: 0.6;
-    cursor: progress;
-}
-
-.ares-results {
-    position: absolute;
-    top: calc(100% + 0.35rem);
-    left: 0;
-    right: 0;
-    z-index: 60;
-    min-width: min(28rem, 80vw);
-    background: rgba(24, 24, 27, 0.97);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
-    border-radius: 0.6rem;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-    max-height: 16rem;
-    overflow-y: auto;
-    padding: 0.3rem;
-}
-
-.ares-results.hidden {
-    display: none;
-}
-
-.ares-result {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    width: 100%;
-    text-align: left;
-    background: transparent;
-    border: none;
-    border-radius: 0.45rem;
-    color: var(--text-main);
-    font-family: var(--font-inter);
-    font-size: 0.9rem;
-    padding: 0.5rem 0.65rem;
-    cursor: pointer;
-}
-
-.ares-result:hover,
-.ares-result:focus {
-    background: rgba(139, 92, 246, 0.2);
-    outline: none;
-}
-
-.ares-result small,
-.ares-more {
-    color: var(--text-muted);
-    font-size: 0.75rem;
-    line-height: 1.35;
-}
-
-.ares-more {
-    padding: 0.45rem 0.65rem 0.3rem;
-}
-
-.client-hint {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    line-height: 1.4;
-}
-
-.client-hint:empty {
-    display: none;
-}
-
-.meta-field textarea {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid transparent;
-    border-bottom: 1px solid var(--border);
-    border-radius: 0.5rem;
-    color: var(--text-main);
-    font-family: var(--font-inter);
-    font-size: 0.95rem;
-    line-height: 1.5;
-    padding: 0.6rem 0.8rem;
-    outline: none;
-    transition: all 0.25s ease;
-    width: 100%;
-    min-height: 4.6rem;
-    resize: vertical;
-}
-
-.meta-field textarea:focus {
-    background: rgba(0, 0, 0, 0.4);
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-glow);
-}
-
-.meta-field input::placeholder,
-.meta-field textarea::placeholder {
-    color: var(--text-muted);
-    opacity: 0.45;
-}
-
-/* Oddělovač skupin polí uvnitř panelu */
-.meta-divider {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 0.5rem;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--primary);
-    opacity: 0.9;
-}
-
-.meta-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-}
-
-/* ================================================================== */
-/*  Ovládání DPH / měny                                                */
-/* ================================================================== */
-
-.mini-select {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border);
-    border-radius: 2rem;
-    color: var(--text-main);
-    font-family: var(--font-inter);
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.35rem 0.7rem;
-    outline: none;
-    cursor: pointer;
-}
-
-.mini-select option {
-    background: #18181b;
-    color: var(--text-main);
-}
-
-.currency-group {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.rate-field {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-}
-
-.rate-field input {
-    width: 4.5rem;
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid var(--border);
-    border-radius: 0.5rem;
-    color: var(--text-main);
-    font-family: var(--font-inter);
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-align: right;
-    padding: 0.3rem 0.5rem;
-    outline: none;
-    transition: all 0.2s ease;
-}
-
-.rate-field input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-glow);
-}
-
-.rate-suffix {
-    text-transform: none;
-    letter-spacing: 0;
-}
-
-/* ================================================================== */
-/*  Přepínač DNY / MĚSÍCE v hlavičce tabulky                           */
-/* ================================================================== */
-
-.header-unit-toggle {
-    background: rgba(139, 92, 246, 0.12);
-    border: 1px solid rgba(139, 92, 246, 0.25);
-    border-radius: 0.5rem;
-    color: var(--text-muted);
-    font-family: var(--font-inter);
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.35rem 0.5rem;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    width: 100%;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
-
-.header-unit-toggle:hover {
-    background: rgba(139, 92, 246, 0.25);
-    color: var(--text-main);
-}
-
-.toggle-icon {
-    font-size: 0.55rem;
-    opacity: 0.7;
-}
-
-/* ================================================================== */
-/*  Původní cena                                                       */
-/* ================================================================== */
-
-.old-price-toggle {
-    align-self: flex-start;
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-family: var(--font-inter);
-    font-size: 0.72rem;
-    font-weight: 600;
-    padding: 0.1rem 0;
-    cursor: pointer;
-    opacity: 0.55;
-    transition: all 0.2s ease;
-}
-
-.old-price-toggle:hover {
-    opacity: 1;
-    color: var(--primary);
-}
-
-.old-price-remove {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 0.9rem;
-    line-height: 1;
-    padding: 0 0.2rem;
-    opacity: 0.5;
-    transition: all 0.2s ease;
-}
-
-.old-price-remove:hover {
-    color: var(--danger);
-    opacity: 1;
-}
-
-.old-price-container[hidden] {
-    display: none;
-}
-
-/* ================================================================== */
-/*  Souhrnné řádky                                                     */
-/* ================================================================== */
-
-.discount-row {
-    background: rgba(139, 92, 246, 0.05);
-}
-
-.discount-row .label {
-    color: var(--text-muted);
-}
-
-.summary-input {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid transparent;
-    border-bottom: 1px solid var(--border);
-    border-radius: 0.5rem;
-    color: var(--text-main);
-    font-family: var(--font-inter);
-    font-size: 1rem;
-    font-weight: 700;
-    text-align: right;
-    padding: 0.5rem 0.75rem;
-    width: 100%;
-    outline: none;
-    transition: all 0.25s ease;
-}
-
-.summary-input:focus {
-    background: rgba(0, 0, 0, 0.4);
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-glow);
-}
-
-/* ================================================================== */
-/*  Zamčené řádky (barter – doplňkové služby)                          */
-/* ================================================================== */
-
-.locked-row .item-input {
-    cursor: default;
-    color: var(--text-muted);
-}
-
-/* ================================================================== */
-/*  Akční tlačítka                                                     */
-/* ================================================================== */
-
-.row-actions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
-}
-
-.hint {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    opacity: 0.7;
-}
-
-kbd {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid var(--border);
-    border-radius: 0.3rem;
-    padding: 0.1rem 0.35rem;
-    font-family: var(--font-inter);
-    font-size: 0.72rem;
-    font-weight: 600;
-}
-
-.secondary-actions {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-}
-
-.secondary-actions .btn {
-    padding: 0.65rem 1.1rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-/* ================================================================== */
-/*  Doba trvání                                                        */
-/* ================================================================== */
-
-.days-input::placeholder {
-    color: var(--text-muted);
-    opacity: 0.4;
-}
-
-/* ================================================================== */
-/*  Šířky sloupců – název položky má dostat co nejvíc místa           */
-/* ================================================================== */
-
-.item-col {
-    width: auto;
-    min-width: 12rem;
-}
-
-.price-col {
-    width: 11rem;
-}
-
-.item-input {
-    min-width: 0;
-    text-overflow: ellipsis;
-}
-
-/* Na užších oknech necháme tabulku vodorovně rolovat místo drcení */
-.card {
-    overflow-x: auto;
-}
-
-#priceTable {
-    min-width: 800px;
+@media (max-width: 860px) {
+    .container {
+        padding: 0 0.9rem 9rem;
+    }
+
+    .topbar {
+        position: static;
+        flex-wrap: wrap;
+    }
+
+    .top-controls {
+        border-radius: var(--radius-lg);
+    }
+
+    .card {
+        overflow-x: auto;
+    }
+
+    .app-actions {
+        flex-wrap: wrap;
+        border-radius: var(--radius-lg);
+    }
+
+    .btn-primary kbd {
+        display: none;
+    }
 }

@@ -125,6 +125,8 @@ const el = {
     closing: document.getElementById('metaClosing'),
   },
   metaToggle: document.getElementById('metaToggle'),
+  dockTotal: document.getElementById('dockTotal'),
+  dockTotalLabel: document.getElementById('dockTotalLabel'),
   metaGrid: document.getElementById('metaGrid'),
 };
 
@@ -352,7 +354,6 @@ function openMetaPanel() {
   if (!el.metaGrid.classList.contains('collapsed')) return;
   el.metaGrid.classList.remove('collapsed');
   el.metaToggle.setAttribute('aria-expanded', 'true');
-  el.metaToggle.querySelector('.meta-toggle-icon').textContent = '▼';
 }
 
 /* ================================================================== */
@@ -363,7 +364,8 @@ function openMetaPanel() {
 /*  přepsání názvu tyhle údaje zahodí — už by nemusely sedět.          */
 /* ================================================================== */
 
-const ARES_BUTTON_LABEL = '🔍 ARES';
+// Původní obsah tlačítka (ikona + text) – po hledání se vrací přes innerHTML.
+const ARES_BUTTON_LABEL = el.aresBtn.innerHTML;
 
 let clientInfo = { ico: '', dic: '', address: '' };
 let aresBusy = false;
@@ -451,7 +453,7 @@ async function lookupClientInAres() {
   } finally {
     aresBusy = false;
     el.aresBtn.disabled = false;
-    el.aresBtn.textContent = ARES_BUTTON_LABEL;
+    el.aresBtn.innerHTML = ARES_BUTTON_LABEL;
   }
 
   if (!result || !result.ok) {
@@ -801,6 +803,12 @@ function recalculate() {
   el.totalWithVat.textContent = formatPrice(model.totalWithVat);
   el.vatRowLabel.textContent =
     state.vatRate === 0 ? 'Celkem (DPH 0 %)' : `Celkem s DPH (${state.vatRate} %)`;
+
+  // Spodní lišta ukazuje částku, kterou klient uvidí jako výslednou.
+  if (el.dockTotal) {
+    el.dockTotal.textContent = formatPrice(state.showVat ? model.totalWithVat : model.subtotal);
+    el.dockTotalLabel.textContent = state.showVat ? el.vatRowLabel.textContent : 'Celkem bez DPH';
+  }
 
   el.discountModeToggle.textContent = state.discountMode === 'pct' ? '%' : currencySymbol();
   el.discountModeToggle.classList.toggle('is-amount', state.discountMode !== 'pct');
@@ -1436,6 +1444,7 @@ function deserialize(data) {
   buildRowsFromSpec(data.rows);
   applyLayout();
   recalculate();
+  syncDateLimits();
 }
 
 let autosaveTimer = null;
@@ -1540,6 +1549,7 @@ function prepareNewOfferMeta() {
 
   el.meta.closing.value = DEFAULT_CLOSING_TEXT;
   eventDaysLockedByUser = false;
+  syncDateLimits();
 }
 
 function newOffer() {
@@ -1698,7 +1708,6 @@ document.addEventListener('click', (event) => {
 el.metaToggle.addEventListener('click', () => {
   const collapsed = el.metaGrid.classList.toggle('collapsed');
   el.metaToggle.setAttribute('aria-expanded', String(!collapsed));
-  el.metaToggle.querySelector('.meta-toggle-icon').textContent = collapsed ? '▶' : '▼';
 });
 
 el.copyBtn.addEventListener('click', copyForEmail);
@@ -1745,6 +1754,41 @@ if (window.api) {
     };
     if (actions[action]) actions[action]();
   });
+}
+
+/* ================================================================== */
+/*  Kalendáře u dat                                                    */
+/*  Deinstalace začíná v měsíci instalace a dřívější dny nepustí,      */
+/*  platnost se drží data vystavení. Výběr vyšle událost „input“ jako  */
+/*  ruční zápis, takže dopočty i autosave fungují beze změny.          */
+/* ================================================================== */
+
+let calendars = null;
+
+if (window.DateCalendar) {
+  calendars = {
+    date: DateCalendar.attach(el.meta.date),
+    validUntil: DateCalendar.attach(el.meta.validUntil, {
+      reference: () => el.meta.date.value,
+      referenceLabel: 'Vystaveno',
+      min: () => el.meta.date.value,
+    }),
+    installDate: DateCalendar.attach(el.meta.installDate),
+    removalDate: DateCalendar.attach(el.meta.removalDate, {
+      reference: () => el.meta.installDate.value,
+      referenceLabel: 'Instalace',
+      min: () => el.meta.installDate.value,
+    }),
+  };
+  el.meta.date.addEventListener('input', syncDateLimits);
+  el.meta.installDate.addEventListener('input', syncDateLimits);
+}
+
+/** Minimum u platnosti a deinstalace i pro ruční zápis (pole se pak označí). */
+function syncDateLimits() {
+  if (!calendars) return;
+  calendars.validUntil.syncMin();
+  calendars.removalDate.syncMin();
 }
 
 /* ================================================================== */

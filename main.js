@@ -5,6 +5,26 @@ const { createLookup } = require('./ares');
 
 let mainWindow = null;
 
+/** Adresa jediné stránky aplikace – okno nesmí ukazovat nic jiného. */
+const APP_URL = require('url').pathToFileURL(path.join(__dirname, 'index.html')).href;
+
+/** IPC přijímá jen zprávy z hlavního rámu stránky aplikace. */
+function isTrustedSender(event) {
+  const frame = event.senderFrame;
+  return Boolean(frame) && frame === event.sender.mainFrame && frame.url.split('#')[0] === APP_URL;
+}
+
+/** Ověří odesílatele, jinak handler vůbec nespustí. */
+function trusted(handler) {
+  return (event, ...args) => {
+    if (!isTrustedSender(event)) throw new Error('Nedůvěryhodný odesílatel.');
+    return handler(event, ...args);
+  };
+}
+
+/** Soubory, které aplikace sama uložila – jen ty smí „ukázat ve složce“. */
+const savedPaths = new Set();
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1480,
@@ -131,7 +151,7 @@ function showOpen(parent, options) {
   return parent ? dialog.showOpenDialog(parent, options) : dialog.showOpenDialog(options);
 }
 
-ipcMain.handle('offer:save', (_event, { data, suggestedName }) =>
+ipcMain.handle('offer:save', trusted((_event, { data, suggestedName }) =>
   withDialog(async (parent) => {
     const { canceled, filePath } = await showSave(parent, {
       title: 'Uložit nabídku',
@@ -141,11 +161,12 @@ ipcMain.handle('offer:save', (_event, { data, suggestedName }) =>
     if (canceled || !filePath) return { ok: false, canceled: true };
 
     await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf8');
+    savedPaths.add(filePath);
     return { ok: true, filePath };
   })
-);
+));
 
-ipcMain.handle('offer:load', () =>
+ipcMain.handle('offer:load', trusted(() =>
   withDialog(async (parent) => {
     const { canceled, filePaths } = await showOpen(parent, {
       title: 'Otevřít nabídku',
@@ -161,7 +182,7 @@ ipcMain.handle('offer:load', () =>
       return { ok: false, error: 'Soubor se nepodařilo načíst nebo není platná nabídka.' };
     }
   })
-);
+));
 
 /* ------------------------------------------------------------------ */
 /*  IPC: export do PDF                                                 */
@@ -169,7 +190,7 @@ ipcMain.handle('offer:load', () =>
 /*  ne tmavé UI aplikace.                                              */
 /* ------------------------------------------------------------------ */
 
-ipcMain.handle('offer:export-pdf', (_event, { html, suggestedName }) =>
+ipcMain.handle('offer:export-pdf', trusted((_event, { html, suggestedName }) =>
   withDialog(async (parent) => {
     const { canceled, filePath } = await showSave(parent, {
       title: 'Exportovat do PDF',
@@ -210,6 +231,7 @@ ipcMain.handle('offer:export-pdf', (_event, { html, suggestedName }) =>
       });
 
       await fs.writeFile(filePath, buffer);
+      savedPaths.add(filePath);
       return { ok: true, filePath };
     } catch (err) {
       return { ok: false, error: String(err && err.message ? err.message : err) };
@@ -218,11 +240,12 @@ ipcMain.handle('offer:export-pdf', (_event, { html, suggestedName }) =>
       fs.unlink(tmpFile).catch(() => {});
     }
   })
-);
+));
 
-ipcMain.handle('shell:show-item', async (_event, filePath) => {
-  shell.showItemInFolder(filePath);
-});
+// Jen soubory, které aplikace v tomhle běhu sama uložila – ne libovolná cesta z okna.
+ipcMain.handle('shell:show-item', trusted(async (_event, filePath) => {
+  if (savedPaths.has(filePath)) shell.showItemInFolder(filePath);
+}));
 
 /* ------------------------------------------------------------------ */
 /*  IPC: zápis do schránky                                             */
@@ -230,14 +253,14 @@ ipcMain.handle('shell:show-item', async (_event, filePath) => {
 /*  vyžaduje aktivní fokus dokumentu.                                  */
 /* ------------------------------------------------------------------ */
 
-ipcMain.handle('clipboard:write', (_event, { html, text }) => {
+ipcMain.handle('clipboard:write', trusted((_event, { html, text }) => {
   try {
     clipboard.write({ html, text });
     return { ok: true };
   } catch (err) {
     return { ok: false, error: String(err && err.message ? err.message : err) };
   }
-});
+}));
 
 /* ------------------------------------------------------------------ */
 /*  IPC: vyhledání klienta v ARES                                      */
@@ -249,7 +272,7 @@ ipcMain.handle('clipboard:write', (_event, { html, text }) => {
 
 const aresLookup = createLookup((url, init) => net.fetch(url, init));
 
-ipcMain.handle('ares:lookup', (_event, query) => aresLookup(query));
+ipcMain.handle('ares:lookup', trusted((_event, query) => aresLookup(query)));
 
 /* ------------------------------------------------------------------ */
 /*  Zabezpečení: žádná externí navigace, žádná nová okna               */
@@ -258,9 +281,14 @@ ipcMain.handle('ares:lookup', (_event, query) => aresLookup(query));
 app.on('web-contents-created', (_event, contents) => {
   contents.setWindowOpenHandler(() => ({ action: 'deny' }));
 
+  // Okno smí ukazovat jen aplikaci. Dřív prošel jakýkoli file:// – přetažený
+  // HTML soubor by nahradil stránku a dostal přístup k window.api.
+  // (Okno pro PDF nenaviguje, soubor se mu načte přes loadFile.)
   contents.on('will-navigate', (event, url) => {
-    if (!url.startsWith('file://')) event.preventDefault();
+    if (url.split('#')[0] !== APP_URL) event.preventDefault();
   });
+
+  contents.on('will-attach-webview', (event) => event.preventDefault());
 });
 
 app.whenReady().then(() => {

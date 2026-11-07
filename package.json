@@ -1,6 +1,6 @@
 {
   "name": "electron-price-table",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Generátor cenových nabídek pro e-mail (Electron).",
   "main": "main.js",
   "scripts": {
@@ -28,7 +28,12 @@
       "index.html",
       "style.css",
       "logo.png",
-      "icon.png"
+      "icon.png",
+      "sky.js",
+      "calendar.js",
+      "mascot.js",
+      "fonts/**/*",
+      "assets/**/*"
     ],
     "win": {
       "target": [
