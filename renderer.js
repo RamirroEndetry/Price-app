@@ -48,20 +48,22 @@ function discountAmountFrom(base, mode, value) {
 /* ================================================================== */
 /*  Výchozí data jednotlivých režimů                                   */
 /*  days: '' = položka se nenásobí dobou                               */
+/*  noOldPrice: true = u služeb (instalace, doprava, kauce…) nemá      */
+/*  „původní cena“ smysl, tlačítko se nenabízí. Nové řádky ho mají.    */
 /* ================================================================== */
 
 const DEFAULTS = {
   rental: [
     { item: 'Pronájem panelu', qty: 1, days: 1, price: 0, oldPrice: 0 },
-    { item: 'Instalace a montáž', qty: 1, days: '', price: 0 },
-    { item: 'Doprava', qty: 1, days: '', price: 0 },
-    { item: 'Kauce', qty: 1, days: '', price: 0 },
+    { item: 'Instalace a montáž', qty: 1, days: '', price: 0, noOldPrice: true },
+    { item: 'Doprava', qty: 1, days: '', price: 0, noOldPrice: true },
+    { item: 'Kauce', qty: 1, days: '', price: 0, noOldPrice: true },
   ],
   sale: [
     { item: 'Prodej panelu', qty: 1, days: '', price: 0, oldPrice: 0 },
-    { item: 'Příslušenství', qty: 1, days: '', price: 0 },
-    { item: 'Montáž a zprovoznění', qty: 1, days: '', price: 0 },
-    { item: 'Doprava', qty: 1, days: '', price: 0 },
+    { item: 'Příslušenství', qty: 1, days: '', price: 0, noOldPrice: true },
+    { item: 'Montáž a zprovoznění', qty: 1, days: '', price: 0, noOldPrice: true },
+    { item: 'Doprava', qty: 1, days: '', price: 0, noOldPrice: true },
   ],
   barter: [
     { kind: 'section', title: 'Pronájem techniky', key: 'equipment' },
@@ -81,6 +83,14 @@ const DEFAULTS = {
     { kind: 'subtotal' },
   ],
 };
+
+/**
+ * Starší nabídky a dnešní autosave příznak noOldPrice nemají – servisní
+ * položky z výchozích dat poznáme podle názvu, aby se jim tlačítko taky nenabízelo.
+ */
+const NO_OLD_PRICE_ITEMS = new Set(
+  Object.values(DEFAULTS).flat().filter((row) => row.noOldPrice).map((row) => row.item)
+);
 
 /* ================================================================== */
 /*  DOM reference                                                      */
@@ -588,6 +598,14 @@ function createRow(data = {}) {
     oldPriceToggle.hidden = true;
   }
 
+  // Služby (instalace, doprava, kauce…) původní cenu nenabízejí. Kdyby ji
+  // starší nabídka přesto měla vyplněnou, zobrazí se a půjde odebrat.
+  const noOldPrice = data.noOldPrice ?? NO_OLD_PRICE_ITEMS.has(data.item);
+  if (noOldPrice) {
+    tr.dataset.noOldPrice = '1';
+    oldPriceToggle.hidden = true;
+  }
+
   // Validace při opuštění pole
   qtyInput.addEventListener('blur', () => {
     const n = parseFloat(qtyInput.value);
@@ -630,7 +648,7 @@ function createRow(data = {}) {
 
   oldPriceRemove.addEventListener('click', () => {
     oldPriceBox.hidden = true;
-    oldPriceToggle.hidden = false;
+    oldPriceToggle.hidden = tr.dataset.noOldPrice === '1';
     oldPriceInput.value = 0;
     recalculate();
   });
@@ -735,6 +753,7 @@ function readModel() {
       total,
       sectionKey,
       locked: itemInput.readOnly,
+      noOldPrice: tr.dataset.noOldPrice === '1',
     });
   }
 
@@ -1396,6 +1415,7 @@ function serialize() {
         oldPrice: row.oldPrice,
         discount: { mode: row.discountMode, value: row.discountValue },
         locked: row.locked,
+        noOldPrice: row.noOldPrice,
       };
     }),
   };

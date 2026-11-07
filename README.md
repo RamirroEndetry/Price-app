@@ -24,11 +24,12 @@ nabídek do souboru.
   mlhovina, hvězdy a meteory (`sky.js`), skleněné panely, písma
   Bricolage Grotesque a JetBrains Mono přibalená ve složce `fonts/` (OFL)
 - **Maskot** v horní liště – vlastní postavička v levandulové mikině s oušky na
-  kapuci. Chvíli stojí a dýchá, pak se stydlivě usměje, zamává a vrátí se do
+  kapuci. Chvíli stojí, pak se stydlivě usměje, zamává a vrátí se do
   klidu; najetí myší animaci spustí hned. Animace je 5s průhledné video
   `assets/mascot-dance.webm` (vygenerované v Higgsfield z její předlohy na
   zeleném pozadí se stejným prvním i posledním snímkem, zelená vyříznutá
-  ffmpegem do VP9 s alfa kanálem), klid je jeho první snímek `mascot-idle.png`.
+  ffmpegem do VP9 s alfa kanálem), klid je jeho první snímek `mascot-idle@Nx.png` v přesné velikosti pro
+  každé měřítko obrazovky (`srcset`), aby ho prohlížeč nezmenšoval a nerozmazal.
   Řídí ho `mascot.js`, CSP proto povoluje `media-src 'self'`.
 
 ## Webová verze (GitHub Pages)

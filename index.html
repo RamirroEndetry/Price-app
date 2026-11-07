@@ -22,13 +22,14 @@
                 <!--
                   Maskot: vlastní postavička uživatele v mikině s oušky. Animace je krátké
                   průhledné video assets/mascot-dance.webm (vygenerované z její předlohy,
-                  zelené pozadí vyříznuté), v klidu ukazuje první snímek mascot-idle.png.
+                  zelené pozadí vyříznuté), v klidu ukazuje první snímek mascot-idle@Nx.png
+                  (přesná velikost pro každé měřítko obrazovky přes srcset – nerozmazává se).
                   Střídání řídí mascot.js, dýchání a prolínání style.css (sekce „Maskot“).
                 -->
                 <span class="mascot" title="Ahoj! ♥" aria-hidden="true">
                     <span class="mascot-figure">
-                        <img class="mascot-idle" src="assets/mascot-idle.png" alt="" width="55" height="96" draggable="false">
-                        <video class="mascot-video" src="assets/mascot-dance.webm" width="55" height="96" muted playsinline preload="auto" disablepictureinpicture tabindex="-1"></video>
+                        <img class="mascot-idle" src="assets/mascot-idle@1x.png" srcset="assets/mascot-idle@1x.png 1x, assets/mascot-idle@1.25x.png 1.25x, assets/mascot-idle@1.5x.png 1.5x, assets/mascot-idle@1.75x.png 1.75x, assets/mascot-idle@2x.png 2x, assets/mascot-idle@2.5x.png 2.5x, assets/mascot-idle@3x.png 3x" alt="" width="51" height="89" draggable="false">
+                        <video class="mascot-video" src="assets/mascot-dance.webm" width="51" height="89" muted playsinline preload="auto" disablepictureinpicture tabindex="-1"></video>
                     </span>
                 </span>
                 <div class="topbar-titles">

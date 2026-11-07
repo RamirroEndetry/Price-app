@@ -285,7 +285,7 @@ button {
 
 /* ------------------------------------------------------------------
    Maskot – vlastní postavička v mikině s oušky na kapuci
-   Klid: mascot-idle.png jemně dýchá. Animace: mascot-dance.webm
+   Klid: mascot-idle@Nx.png (ostrý, bez pohybu). Animace: mascot-dance.webm
    (průhledné video) – přehrání řídí mascot.js, tady jen prolínání.
    Postavička je vyšší než lišta a lehce z ní vykukuje nahoru i dolů;
    výška je spočítaná tak, aby se ouška vešla i při posílání srdíčka.
@@ -294,19 +294,22 @@ button {
 .mascot {
     position: relative;
     flex-shrink: 0;
-    width: 3.2rem;
+    width: 51px;
     height: 3.2rem;
     cursor: pointer;
 }
 
-/* Výřez videa těsně kolem postavičky (poměr 456 : 792) */
+/*
+  Výřez videa těsně kolem postavičky (poměr 456 : 792). Rozměry v celých
+  pixelech = přesně velikost klidových obrázků mascot-idle@Nx.png, takže je
+  prohlížeč nemusí přepočítávat (přepočet je rozmazával).
+*/
 .mascot-figure {
     position: absolute;
-    left: 50%;
-    bottom: -1.3rem;
-    width: 3.2rem;
-    height: 5.55rem;
-    margin-left: -1.6rem;
+    left: 0;
+    bottom: -21px;
+    width: 51px;
+    height: 89px;
 }
 
 .mascot-idle,
@@ -323,12 +326,10 @@ button {
     transition: opacity 0.35s ease;
 }
 
-/* V klidu dýchá a nepatrně se pohupuje */
-.mascot-idle {
-    transform-origin: 50% 98%;
-    animation: mascot-idle 3.4s ease-in-out infinite;
-}
-
+/*
+  Klidový obrázek stojí – žádný transform. Jemné „dýchání“ (scale/rotate) ho
+  nutilo prohlížeč pořád převzorkovávat a tím rozmazávalo.
+*/
 .mascot-video {
     opacity: 0;
 }
@@ -339,13 +340,6 @@ button {
 
 .mascot.is-dancing .mascot-idle {
     opacity: 0;
-}
-
-@keyframes mascot-idle {
-    0%, 100% { transform: rotate(0) scale(1, 1); }
-    25% { transform: rotate(-1.2deg) scale(1.006, 1.012); }
-    50% { transform: rotate(0) scale(1.01, 1.018); }
-    75% { transform: rotate(1.2deg) scale(1.006, 1.012); }
 }
 
 .topbar-overline {
